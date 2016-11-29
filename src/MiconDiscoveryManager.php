@@ -58,8 +58,6 @@ class MiconDiscoveryManager extends DefaultPluginManager {
    */
   public function getDefinitionMatch($string) {
     $definitions = $this->getDefinitions();
-    dsm($definitions);
-    dsm($string);
     $icon_id = NULL;
     // Check for exact string matches first.
     foreach ($definitions as $definition) {
