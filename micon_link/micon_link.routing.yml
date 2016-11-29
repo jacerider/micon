@@ -1,0 +1,11 @@
+
+micon_link.micon_link_config_form:
+  path: '/admin/structure/micon/link'
+  defaults:
+    _form: '\Drupal\micon_link\Form\MiconLinkConfigForm'
+    _title: 'MiconLinkConfigForm'
+  requirements:
+    _permission: 'administer micon link'
+  options:
+    _admin_route: TRUE
+

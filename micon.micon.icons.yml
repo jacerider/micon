@@ -1,0 +1,51 @@
+# Base micon_info plugin definitions.
+# Plugin property $defaults are defined in MiconInfoManager.
+label:
+  text: label
+  icon: fa-tag
+status:
+  text: status
+  icon: fa-adjust
+id:
+  text: id
+  icon: fa-qrcode
+operations:
+  text: operations
+  icon: fa-cog
+published:
+  regex: ^publish
+  icon: fa-circle
+  weight: -1
+unpublished:
+  regex: ^unpublish
+  icon: fa-circle-o
+view:
+  regex: ^view
+  icon: fa-eye
+edit:
+  regex: ^edit
+  icon: fa-edit
+delete:
+  regex: ^delete
+  icon: fa-trash
+revision:
+  regex: ^revision
+  icon: fa-undo
+devel:
+  regex: ^devel
+  icon: fa-code
+translate:
+  regex: ^translate
+  icon: fa-language
+results:
+  regex: ^results
+  icon: fa-list
+test:
+  regex: ^test
+  icon: fa-code-fork
+image:
+  text: image
+  icon: fa-image
+font:
+  text: font
+  icon: fa-font

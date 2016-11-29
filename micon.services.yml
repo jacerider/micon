@@ -1,0 +1,7 @@
+services:
+  plugin.manager.micon.discovery:
+    class: Drupal\micon\MiconDiscoveryManager
+    arguments: ['@module_handler', '@cache.discovery']
+  micon.icon.manager:
+    class: Drupal\micon\MiconIconManager
+    arguments: ["@entity_type.manager", "@cache.discovery"]
