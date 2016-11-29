@@ -47,7 +47,7 @@ class MiconHtmlRouteProvider extends AdminHtmlRouteProvider {
           '_entity_list' => $entity_type_id,
           // Make sure this is not a TranslatableMarkup object as the
           // TitleResolver translates this string again.
-          '_title' => (string) $entity_type->getLabel(),
+          '_title' => (string) $entity_type->getPluralLabel(),
         ])
         ->setRequirement('_permission', $entity_type->getAdminPermission())
         ->setOption('_admin_route', TRUE);
