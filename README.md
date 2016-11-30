@@ -4,7 +4,75 @@ Provides functionality for adding [IcoMoon](https://icomoon.io) icon packages to
 
 ## Installing
 
-The Micon module can be installed the same way typical Drupal modules are installed. There are no dependencies.
+The Micon module can be installed the same way typical Drupal modules are installed. Below are a couple common examples of how to install with modern conventions (i.e., `composer`, `drush`). There are no external dependencies outside of Drupal core.
+
+### Install via Composer
+
+Refer to Drupal's guide on [_Using composer to manage Drupal site dependencies_](https://www.drupal.org/docs/develop/using-composer/using-composer-to-manage-drupal-site-dependencies) for more details but generally you can use the following as examples.
+
+It's also important that you tell composer where your contributed modules, themes, and profiles should be installed instead of the composer convention of `vendor`.
+
+> **Define the directories to which Drupal projects should be downloaded**
+>
+> By default, Composer will download all packages to the "vendor" directory. Clearly, this doesn't jive with Drupal modules, themes, profiles, and libraries. To ensure that packages are downloaded to the correct path, Drupal uses the composer/installers package. Just add the following to your composer.json to configure the directories for your Drupal site:
+
+```json
+"extra": {
+    "installer-paths": {
+        "modules/contrib/{$name}": ["type:drupal-module"],
+        "modules/custom/{$name}": ["type:drupal-custom-module"],
+        "profiles/contrib/{$name}": ["type:drupal-profile"],
+        "themes/contrib/{$name}": ["type:drupal-theme"],
+        "themes/custom/{$name}": ["type:drupal-custom-theme"]
+    }
+}
+```
+
+
+#### Via Drupal.org
+
+```bash
+# configure composer to look up Drupal modules,
+# themes, etc. from Drupal.org
+$ composer config repositories.drupal composer https://packages.drupal.org/8
+
+# Require the 'micon' project/package from Drupal.org
+$ composer require drupal/micon
+
+#
+# OR specify a version of the module:
+#
+$ composer require drupal/micon:1.x-dev
+```
+#### Via Github
+
+Add the following to the respective `repositories` and `require` sections of your `composer.json` file:
+
+```json
+{
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/jacerider/micon.git"
+        }
+    ],
+    "require": {
+        "jacerider/micon": "dev-[8.x-1.x-dev]"
+    }
+}
+```
+
+### Install via drush
+
+_**Note:** Composer is the preferred convention, but if you need to commit the contributed module files to your repository then `drush` is a good alternative._
+
+```bash
+# Download the module
+$ drush dl micon
+
+# enable the module
+$ drush en micon
+```
 
 ## Adding IcoMoon packages
 
