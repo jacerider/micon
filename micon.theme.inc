@@ -50,7 +50,7 @@ function template_preprocess_micon_package(array &$variables) {
     $variables['content'][$key] = $variables['element'][$key];
   }
 
-  $function = '_template_preprocess_micon_package__' . $variables['type'];
+  $function = 'micon_template_preprocess_micon_package__' . $variables['type'];
   if (function_exists($function)) {
     $function($variables);
   }
@@ -59,7 +59,7 @@ function template_preprocess_micon_package(array &$variables) {
 /**
  * Prepares variables for Micon package templates of type ICON.
  */
-function _template_preprocess_micon_package__font(&$variables) {
+function micon_template_preprocess_micon_package__font(&$variables) {
   $micon = $variables['micon'];
   $info = $micon->getInfo();
 
@@ -98,9 +98,8 @@ line-height: 1;
 /**
  * Prepares variables for Micon package templates of type SVG.
  */
-function _template_preprocess_micon_package__image(array &$variables) {
+function micon_template_preprocess_micon_package__image(array &$variables) {
   $micon = $variables['micon'];
-  $info = $micon->getInfo();
 
   $variables['content']['icons'] = [
     '#theme' => 'fieldset',

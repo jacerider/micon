@@ -4,7 +4,6 @@ namespace Drupal\micon_local_task\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\micon\Entity\Micon;
 
 /**
  * Class MiconLocalTaskConfigForm.

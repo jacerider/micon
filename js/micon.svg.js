@@ -1,17 +1,21 @@
-/*!
+/**
+ * @file
+ * @file!
+ *
  * @copyright Copyright (c) 2016 IcoMoon.io
- * @license   Licensed under MIT license
+ * @license Licensed under MIT license
  *            See https://github.com/Keyamoon/svgxuse
- * @version   1.1.23
+ * @version 1.1.23
  */
+
 /*jslint browser: true */
 /*global XDomainRequest, MutationObserver, window */
 (function () {
     'use strict';
     if (window && window.addEventListener) {
-        var cache = Object.create(null); // holds xhr objects to prevent multiple requests
+        var cache = Object.create(null); // Holds xhr objects to prevent multiple requests.
         var checkUseElems;
-        var tid; // timeout id
+        var tid; // Timeout id.
         var debouncedCheck = function () {
             clearTimeout(tid);
             tid = setTimeout(checkUseElems, 100);
@@ -35,9 +39,12 @@
                         observer.disconnect();
                         window.removeEventListener('resize', debouncedCheck, false);
                         window.removeEventListener('orientationchange', debouncedCheck, false);
-                    } catch (ignore) {}
+                    }
+catch (ignore) {
+}
                 };
-            } else {
+            }
+else {
                 document.documentElement.addEventListener('DOMSubtreeModified', debouncedCheck, false);
                 unobserveChanges = function () {
                     document.documentElement.removeEventListener('DOMSubtreeModified', debouncedCheck, false);
@@ -54,7 +61,8 @@
                 var a;
                 if (loc.protocol !== undefined) {
                     a = loc;
-                } else {
+                }
+else {
                     a = document.createElement('a');
                     a.href = loc;
                 }
@@ -69,7 +77,8 @@
                 origin2 = getOrigin(url);
                 if (Request.withCredentials === undefined && origin2 !== '' && origin2 !== origin) {
                     Request = XDomainRequest || undefined;
-                } else {
+                }
+else {
                     Request = XMLHttpRequest;
                 }
             }
@@ -79,7 +88,7 @@
         checkUseElems = function () {
             var base;
             var bcr;
-            var fallback = ''; // optional fallback URL in case no base path to SVG file was given and no symbol definition was found.
+            var fallback = ''; // Optional fallback URL in case no base path to SVG file was given and no symbol definition was found.
             var hash;
             var href;
             var i;
@@ -90,11 +99,11 @@
             var uses;
             var xhr;
             function observeIfDone() {
-                // If done with making changes, start watching for chagnes in DOM again
+                // If done with making changes, start watching for chagnes in DOM again.
                 inProgressCount -= 1;
-                if (inProgressCount === 0) { // if all xhrs were resolved
+                if (inProgressCount === 0) { // If all xhrs were resolved
                     unobserveChanges(); // make sure to remove old handlers
-                    observeChanges(); // watch for changes to DOM
+                    observeChanges(); // watch for changes to DOM.
                 }
             }
             function attrUpdateFunc(spec) {
@@ -130,37 +139,39 @@
                     observeIfDone();
                 };
             }
-            unobserveChanges(); // stop watching for changes to DOM
-            // find all use elements
+            unobserveChanges(); // Stop watching for changes to DOM
+            // find all use elements.
             uses = document.getElementsByTagName('use');
             for (i = 0; i < uses.length; i += 1) {
                 try {
                     bcr = uses[i].getBoundingClientRect();
-                } catch (ignore) {
-                    // failed to get bounding rectangle of the use element
+                }
+catch (ignore) {
+                    // Failed to get bounding rectangle of the use element.
                     bcr = false;
                 }
                 href = uses[i].getAttributeNS(xlinkNS, 'href');
                 if (href && href.split) {
                     url = href.split('#');
-                } else {
+                }
+else {
                     url = ["", ""];
                 }
                 base = url[0];
                 hash = url[1];
                 isHidden = bcr && bcr.left === 0 && bcr.right === 0 && bcr.top === 0 && bcr.bottom === 0;
                 if (bcr && bcr.width === 0 && bcr.height === 0 && !isHidden) {
-                    // the use element is empty
+                    // The use element is empty
                     // if there is a reference to an external SVG, try to fetch it
-                    // use the optional fallback URL if there is no reference to an external SVG
+                    // use the optional fallback URL if there is no reference to an external SVG.
                     if (fallback && !base.length && hash && !document.getElementById(hash)) {
                         base = fallback;
                     }
                     if (base.length) {
-                        // schedule updating xlink:href
+                        // Schedule updating xlink:href.
                         xhr = cache[base];
                         if (xhr !== true) {
-                            // true signifies that prepending the SVG was not required
+                            // True signifies that prepending the SVG was not required.
                             setTimeout(attrUpdateFunc({
                                 useEl: uses[i],
                                 base: base,
@@ -181,19 +192,22 @@
                             }
                         }
                     }
-                } else {
+                }
+else {
                     if (!isHidden) {
                         if (cache[base] === undefined) {
-                            // remember this URL if the use element was not empty and no request was sent
+                            // Remember this URL if the use element was not empty and no request was sent.
                             cache[base] = true;
-                        } else if (cache[base].onload) {
-                            // if it turns out that prepending the SVG is not necessary,
+                        }
+else if (cache[base].onload) {
+                            // If it turns out that prepending the SVG is not necessary,
                             // abort the in-progress xhr.
                             cache[base].abort();
                             delete cache[base].onload;
                             cache[base] = true;
                         }
-                    } else if (base.length && cache[base]) {
+                    }
+else if (base.length && cache[base]) {
                         attrUpdateFunc({
                             useEl: uses[i],
                             base: base,
@@ -208,7 +222,7 @@
         };
         // The load event fires when all resources have finished loading, which allows detecting whether SVG use elements are empty.
         window.addEventListener('load', function winLoad() {
-            window.removeEventListener('load', winLoad, false); // to prevent memory leaks
+            window.removeEventListener('load', winLoad, false); // To prevent memory leaks.
             tid = setTimeout(checkUseElems, 0);
         }, false);
     }

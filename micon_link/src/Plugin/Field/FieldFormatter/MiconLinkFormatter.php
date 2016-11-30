@@ -3,11 +3,9 @@
 namespace Drupal\micon_link\Plugin\Field\FieldFormatter;
 
 use Drupal\link\Plugin\Field\FieldFormatter\LinkFormatter;
-use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\micon\MiconIconizeTrait;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Path\PathValidatorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
@@ -33,7 +31,6 @@ class MiconLinkFormatter extends LinkFormatter {
    * @var \Drupal\Core\Utility\Token
    */
   protected $token;
-
 
   /**
    * {@inheritdoc}
@@ -113,7 +110,7 @@ class MiconLinkFormatter extends LinkFormatter {
     $entity_type = $entity->getEntityTypeId();
     $title = $this->getSetting('title');
     $icon = $this->getSetting('icon');
-    foreach ($element as $delta => &$item) {
+    foreach ($element as &$item) {
       if ($title) {
         $item['#title'] = $this->token->replace($title, [$entity_type => $entity]);
       }

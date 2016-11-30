@@ -32,7 +32,7 @@ class MiconIcon implements MiconIconInterface, RenderableInterface {
    * @param array $data
    *   The icon data array provided from the Micon package info file.
    */
-  public function __construct($type, $data) {
+  public function __construct($type, array $data) {
     $this->type = $type;
     $this->data = $data;
   }

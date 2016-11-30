@@ -53,7 +53,6 @@ class MiconLinkWidget extends LinkWidget {
    */
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
     $element = parent::formElement($items, $delta, $element, $form, $form_state);
-    $build_info = $form_state->getBuildInfo();
 
     $item = $items[$delta];
     $options = $item->get('options')->getValue();
@@ -106,7 +105,8 @@ class MiconLinkWidget extends LinkWidget {
     if ($enabled_packages) {
       $enabled_packages = array_intersect_key(Micon::loadActiveLabels(), $enabled_packages);
       $summary[] = $this->t('With icon packages: @packages', array('@packages' => implode(', ', $enabled_packages)));
-    } else {
+    }
+    else {
       $summary[] = $this->t('With icon packages: @packages', array('@packages' => 'All'));
     }
     return $summary;

@@ -67,7 +67,7 @@ class Micon extends FormElement {
    *
    * @see _form_validate()
    */
-  public static function processMicon(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function processMicon(array &$element, FormStateInterface $form_state, array &$complete_form) {
     // For proper validation we need to override the type as a select field.
     $element['#type'] = 'select';
     $element['#options'] = [];
@@ -100,7 +100,7 @@ class Micon extends FormElement {
     if (!empty($include)) {
       $packages = array_intersect_key($packages, $include);
     }
-    foreach ($packages as $id => $icons) {
+    foreach ($packages as $icons) {
       foreach ($icons as $icon) {
         if (count($packages) > 1) {
           $element['#options'][$icon->getPackageLabel()][$icon->getSelector()] = $icon->toJson();

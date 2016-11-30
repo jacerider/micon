@@ -1,12 +1,13 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\micon\TwigExtension\Micon.
- */
-
 namespace Drupal\micon\TwigExtension;
 
+/**
+ * A class providing Micon Twig extensions.
+ *
+ * This provides a Twig extension that registers the {{ micon() }} extention
+ * to Twig.
+ */
 class Micon extends \Twig_Extension {
 
   /**
@@ -19,18 +20,28 @@ class Micon extends \Twig_Extension {
     return 'twig.micon';
   }
 
-
+  /**
+   * {@inheritdoc}
+   */
   public function getFunctions() {
     return array(
       new \Twig_SimpleFunction('micon', array($this, 'renderIcon')),
     );
   }
 
-
+  /**
+   * Render the icon.
+   *
+   * @param string $icon
+   *   The icon_id of the icon to render.
+   *
+   * @return mixed[]
+   *   A render array.
+   */
   public static function renderIcon($icon) {
     $build = [
       '#theme' => 'micon_icon',
-      '#icon' => $icon
+      '#icon' => $icon,
     ];
     return $build;
   }

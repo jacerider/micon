@@ -43,11 +43,11 @@ class MiconHtmlRouteProvider extends AdminHtmlRouteProvider {
       $entity_type_id = $entity_type->id();
       $route = new Route($entity_type->getLinkTemplate('collection'));
       $route->setDefaults([
-          '_entity_list' => $entity_type_id,
-          // Make sure this is not a TranslatableMarkup object as the
-          // TitleResolver translates this string again.
-          '_title' => (string) $entity_type->getPluralLabel(),
-        ])
+        '_entity_list' => $entity_type_id,
+        // Make sure this is not a TranslatableMarkup object as the
+        // TitleResolver translates this string again.
+        '_title' => (string) $entity_type->getPluralLabel(),
+      ])
         ->setRequirement('_permission', $entity_type->getAdminPermission())
         ->setOption('_admin_route', TRUE);
       return $route;

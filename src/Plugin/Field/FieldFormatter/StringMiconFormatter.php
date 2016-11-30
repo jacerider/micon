@@ -41,7 +41,7 @@ class StringMiconFormatter extends FormatterBase {
    * @param \Drupal\Core\Field\FieldItemInterface $item
    *   One field item.
    *
-   * @return \Drupal\micon\MiconIcon || NULL
+   * @return \Drupal\micon\MiconIcon|null
    *   The Micon icon matching the icon_id.
    */
   protected function viewIcon(FieldItemInterface $item) {

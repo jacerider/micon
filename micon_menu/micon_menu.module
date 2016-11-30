@@ -28,7 +28,6 @@ function micon_menu_help($route_name, RouteMatchInterface $route_match) {
   }
 }
 
-
 /**
  * Implements hook_entity_base_field_info_alter().
  */
@@ -56,15 +55,6 @@ function micon_menu_module_implements_alter(&$implementations, $hook) {
 
 /**
  * Implements hook_form_BASE_FORM_ID_alter().
- *
- * @param array $form
- *   An associative array containing the structure of the form.
- * @param \Drupal\Core\Form\FormStateInterface $form_state
- *   The current state of the form.
- * @param string $form_id
- *   The form id.
- *
- * @see hook_form_alter()
  */
 function micon_menu_form_node_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
   if (function_exists('menu_ui_form_node_form_alter')) {
@@ -91,7 +81,7 @@ function micon_menu_form_node_form_alter(array &$form, FormStateInterface $form_
       ];
       foreach (array_keys($form['actions']) as $action) {
         if ($action != 'preview' && isset($form['actions'][$action]['#type']) && $form['actions'][$action]['#type'] === 'submit') {
-          if(($key = array_search('menu_ui_form_node_form_submit', $form['actions'][$action]['#submit'])) !== false) {
+          if (($key = array_search('menu_ui_form_node_form_submit', $form['actions'][$action]['#submit'])) !== FALSE) {
             $form['actions'][$action]['#submit'][$key] = 'micon_menu_menu_ui_form_node_form_submit';
           }
         }
@@ -121,8 +111,8 @@ function micon_menu_menu_ui_form_node_form_submit(array $form, FormStateInterfac
       }
     }
     elseif (trim($values['title'])) {
-      // Decompose the selected menu parent option into 'menu_name' and 'parent',
-      // if the form used the default parent selection widget.
+      // Decompose the selected menu parent option into 'menu_name' and
+      // 'parent', if the form used the default parent selection widget.
       if (!empty($values['menu_parent'])) {
         list($menu_name, $parent) = explode(':', $values['menu_parent'], 2);
         $values['menu_name'] = $menu_name;
@@ -136,12 +126,12 @@ function micon_menu_menu_ui_form_node_form_submit(array $form, FormStateInterfac
 /**
  * Helper function to create or update a menu link for a node.
  *
- * @see _menu_ui_node_save().
- *
  * @param \Drupal\node\NodeInterface $node
  *   Node entity.
  * @param array $values
  *   Values for the menu link.
+ *
+ * @see _menu_ui_node_save()
  */
 function _micon_menu_menu_ui_node_save(NodeInterface $node, array $values) {
   /** @var \Drupal\menu_link_content\MenuLinkContentInterface $entity */

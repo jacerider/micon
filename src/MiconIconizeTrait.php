@@ -12,7 +12,7 @@ trait MiconIconizeTrait {
   /**
    * Transforms a string into an icon + string.
    *
-   * This can be used interchangably with the
+   * This can be used interchangeably with the
    * \Drupal\Core\StringTranslation\StringTranslationTrait.
    *
    * @param string $string

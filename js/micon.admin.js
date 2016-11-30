@@ -12,7 +12,7 @@
    *
    * Text search input: input.micon-filter-text
    * Target micon:      input.micon-filter-text[data-micon]
-   * Source text:       .micon-filter-text
+   * Source text:       .micon-filter-text.
    *
    * @type {Drupal~behavior}
    */

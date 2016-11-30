@@ -102,10 +102,10 @@ class MiconForm extends EntityForm {
     $element['publish']['#published_status'] = TRUE;
     $element['publish']['#dropbutton'] = 'save';
     if ($micon->isNew()) {
-      $element['publish']['#value'] = t('Save and publish');
+      $element['publish']['#value'] = $this->t('Save and publish');
     }
     else {
-      $element['publish']['#value'] = $micon->status() ? t('Save and keep published') : t('Save and publish');
+      $element['publish']['#value'] = $micon->status() ? $this->t('Save and keep published') : $this->t('Save and publish');
     }
     $element['publish']['#weight'] = 0;
 
@@ -119,7 +119,7 @@ class MiconForm extends EntityForm {
       $element['unpublish']['#value'] = t('Save as unpublished');
     }
     else {
-      $element['unpublish']['#value'] = !$micon->status() ? t('Save and keep unpublished') : t('Save and unpublish');
+      $element['unpublish']['#value'] = !$micon->status() ? $this->t('Save and keep unpublished') : $this->t('Save and unpublish');
     }
     $element['unpublish']['#weight'] = 10;
 
