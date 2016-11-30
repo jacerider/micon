@@ -116,7 +116,7 @@ class MiconForm extends EntityForm {
     $element['unpublish']['#published_status'] = FALSE;
     $element['unpublish']['#dropbutton'] = 'save';
     if ($micon->isNew()) {
-      $element['unpublish']['#value'] = t('Save as unpublished');
+      $element['unpublish']['#value'] = $this->t('Save as unpublished');
     }
     else {
       $element['unpublish']['#value'] = !$micon->status() ? $this->t('Save and keep unpublished') : $this->t('Save and unpublish');

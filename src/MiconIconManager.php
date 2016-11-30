@@ -146,7 +146,7 @@ class MiconIconManager {
    * @param array $icons
    *   List of icons to store in cache.
    */
-  protected function setCachedPackages($icons) {
+  protected function setCachedPackages(array $icons) {
     $this->cacheSet($this->cacheKey, $icons, Cache::PERMANENT, $this->cacheTags);
     $this->icons = $icons;
   }

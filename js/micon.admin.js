@@ -57,7 +57,6 @@
 
       if ($micon.length) {
         $columns = $micon.find('li');
-        console.log($columns);
 
         $input.on({
           keyup: debounce(filterList, 200),

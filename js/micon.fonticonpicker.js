@@ -33,7 +33,7 @@
       this.settings.iconsPerPage--;
     }
     this.iconPicker = $('<div/>', {
-      'class': 'icons-selector',
+      class: 'icons-selector',
       style: 'position: relative',
       html: '<div class="selector">' + '<span class="selected-icon">' + '<i class="fip-icon-block"></i>' + '</span>' + '<span class="selector-button">' + '<i class="fip-icon-down-dir"></i>' + '</span>' + '</div>' + '<div class="selector-popup" style="display: none;">' + ((this.settings.hasSearch) ? '<div class="selector-search">' + '<input type="text" name="" value="" placeholder="Search icon" class="icons-search-input"/>' + '<i class="fip-icon-search"></i>' + '</div>' : '') + '<div class="selector-category">' + '<select name="" class="icon-category-select" style="display: none">' + '</select>' + '</div>' + '<div class="fip-icons-container"></div>' + '<div class="selector-footer" style="display:none;">' + '<span class="selector-pages">1/2</span>' + '<span class="selector-arrows">' + '<span class="selector-arrow-left" style="display:none;">' + '<i class="fip-icon-left-dir"></i>' + '</span>' + '<span class="selector-arrow-right">' + '<i class="fip-icon-right-dir"></i>' + '</span>' + '</span>' + '</div>' + '</div>'
     });
@@ -62,15 +62,10 @@
 
     init: function () {
       this.iconPicker.addClass(this.settings.theme);
-      this.iconPicker.css({
-          left: -9999
-        })
-        .appendTo('body');
+      this.iconPicker.css({left: -9999}).appendTo('body');
       var iconPickerHeight = this.iconPicker.outerHeight(),
         iconPickerWidth = this.iconPicker.outerWidth();
-      this.iconPicker.css({
-        left: ''
-      });
+      this.iconPicker.css({left: ''});
       this.element.before(this.iconPicker);
       this.element.css({
         visibility: 'hidden',
@@ -402,7 +397,7 @@
             title: item
           })
           .appendTo(this.iconContainer)
-          .children(":first")
+          .children(':first')
           .attr('data-fip-value', item);
       }
       if (!this.settings.emptyIcon && (!this.element.val() || $.inArray(this.element.val(), this.settings.source) === -1)) {
@@ -497,8 +492,8 @@
 
   $.fn.fontIconPicker = function (options) {
     this.each(function () {
-      if (!$.data(this, "fontIconPicker")) {
-        $.data(this, "fontIconPicker", new Plugin(this, options));
+      if (!$.data(this, 'fontIconPicker')) {
+        $.data(this, 'fontIconPicker', new Plugin(this, options));
       }
     });
 
@@ -510,27 +505,27 @@
         iconSearch = false;
       }
       this.each(function () {
-        $.data(this, "fontIconPicker")
+        $.data(this, 'fontIconPicker')
           .settings.source = newIcons;
-        $.data(this, "fontIconPicker")
+        $.data(this, 'fontIconPicker')
           .settings.searchSource = iconSearch;
-        $.data(this, "fontIconPicker")
+        $.data(this, 'fontIconPicker')
           .initSourceIndex();
-        $.data(this, "fontIconPicker")
+        $.data(this, 'fontIconPicker')
           .resetSearch();
-        $.data(this, "fontIconPicker")
+        $.data(this, 'fontIconPicker')
           .loadIcons();
       });
     }, this);
 
     this.destroyPicker = $.proxy(function () {
       this.each(function () {
-        if (!$.data(this, "fontIconPicker")) {
+        if (!$.data(this, 'fontIconPicker')) {
           return;
         }
-        $.data(this, "fontIconPicker")
+        $.data(this, 'fontIconPicker')
           .iconPicker.remove();
-        $.data(this, "fontIconPicker")
+        $.data(this, 'fontIconPicker')
           .element.css({
             visibility: '',
             top: '',
@@ -545,7 +540,7 @@
             border: '',
             verticalAlign: ''
           });
-        $.removeData(this, "fontIconPicker");
+        $.removeData(this, 'fontIconPicker');
       });
     }, this);
 
@@ -555,8 +550,8 @@
       }
       this.destroyPicker();
       this.each(function () {
-        if (!$.data(this, "fontIconPicker")) {
-          $.data(this, "fontIconPicker", new Plugin(this, newOptions));
+        if (!$.data(this, 'fontIconPicker')) {
+          $.data(this, 'fontIconPicker', new Plugin(this, newOptions));
         }
       });
     }, this);

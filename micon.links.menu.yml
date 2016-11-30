@@ -6,4 +6,3 @@ entity.micon.collection:
   description: 'List Micon Packages'
   parent: system.admin_structure
   weight: 99
-

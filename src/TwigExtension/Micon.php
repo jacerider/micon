@@ -5,7 +5,7 @@ namespace Drupal\micon\TwigExtension;
 /**
  * A class providing Micon Twig extensions.
  *
- * This provides a Twig extension that registers the {{ micon() }} extention
+ * This provides a Twig extension that registers the {{ micon() }} extension
  * to Twig.
  */
 class Micon extends \Twig_Extension {

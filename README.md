@@ -6,12 +6,16 @@ Provides functionality for adding [IcoMoon](https://icomoon.io) icon packages to
 
 ## Adding IcoMoon packages
 
-Visit [https://icomoon.io](https://icomoon.io) and build an icon package. You can utilize either **font** packages or **image** packages. Download the zip file provided by IcoMoon.
+Visit <https://icomoon.io> and build an icon package. You can utilize either **font** packages or **image** packages. Download the zip file provided by IcoMoon.
 
 Go to `/admin/structure/micon` and follow these steps:
 
 1. Click the **Add Micon Package** button.
-2. Give your package a **Name**. <br/><br/>_**Note:** A class prefix is added automatically, but it is recommended to keep the class prefix as short as reasonably possible as it is used in both CSS files and within the icon markup. The shorter it is, the smaller your rendered code and dependencies will be._<br/><br/>
+2. Give your package a **Name**.<br>
+  <br>
+  _**Note:** A class prefix is added automatically, but it is recommended to keep the class prefix as short as reasonably possible as it is used in both CSS files and within the icon markup. The shorter it is, the smaller your rendered code and dependencies will be._<br>
+  <br>
+
 3. Place the IcoMoon zip file you previously downloaded into the file upload field
 4. Click **Save** and you are done.
 
@@ -79,19 +83,22 @@ class myClass {
 Modules and themes can add a `NAME.micon.icons.yml` that can define text that will be matched to icons.
 
 **Exact match**
+
 ```yml
 user:
   text: hello world
   icon: fa-user
 ```
+
 **Regular expression match**
+
 ```yml
 user_loose:
   text: ^hello
   icon: fa-user
 ```
 
-When icon definitions are defined this way, modules and themes can utilize any of the above methods of icon placement *without* having to specify an icon in code.
+When icon definitions are defined this way, modules and themes can utilize any of the above methods of icon placement _without_ having to specify an icon in code.
 
 ## Installing
 
@@ -104,7 +111,7 @@ Refer to Drupal's guide on [_Using composer to manage Drupal site dependencies_]
 It's also important that you tell composer where your contributed modules, themes, and profiles should be installed instead of the composer convention of `vendor`.
 
 > **Define the directories to which Drupal projects should be downloaded**
->
+
 > By default, Composer will download all packages to the "vendor" directory. Clearly, this doesn't jive with Drupal modules, themes, profiles, and libraries. To ensure that packages are downloaded to the correct path, Drupal uses the composer/installers package. Just add the following to your composer.json to configure the directories for your Drupal site:
 
 ```json
@@ -134,6 +141,7 @@ $ composer require drupal/micon
 #
 $ composer require drupal/micon:1.x-dev
 ```
+
 #### Via Github
 
 Add the following to the respective `repositories` and `require` sections of your `composer.json` file:
