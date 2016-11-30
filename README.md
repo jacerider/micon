@@ -23,36 +23,46 @@ Published packages are immediately available for use site-wide.
 
 The Micon admin interface provides an overview of all icons along with information on how to use them via CSS and raw HTML.
 
-### Use with twig syntax:
+### Use with twig syntax
 
 ```php
 {{ micon('fa-user') }}
 ```
 
-### Use within render array:
+### Use within render array
 
 ```php
-array(
-  '#theme' => 'iconify_icon',
+// Icon only.
+$output['icon'] = array(
+  '#theme' => 'micon_icon',
   '#icon' => 'fa-user',
+);
+
+// Icon with text.
+$output['icon_with_text'] = array(
+  '#theme' => 'micon',
+  '#title' => t('Hello World'),
+  '#icon' => 'fa-user',
+  '#position' => 'after',
+  '#icon_only' => FALSE,
 );
 ```
 
 ### Use to attach icon to translatable text
 
 ```php
-// Typical translatable text
+// Typical translatable text.
 t('Hello World');
 
-// Translatable text with icon
+// Translatable text with icon.
 micon('Hello World')->setIcon('fa-user');
 ```
 
 ### Use translatable icon trait
 
 ```php
-// Drop in replacement
 use Drupal\micon\MiconIconizeTrait;
+
 class myClass {
     use MiconIconizeTrait;
 
