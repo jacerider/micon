@@ -32,7 +32,7 @@ function micon_theme($existing, $type, $theme, $path) {
   $themes = array();
   $themes['micon'] = array(
     'variables' => [
-      'text' => NULL,
+      'title' => NULL,
       'icon' => NULL,
       'position' => 'before',
       'icon_only' => FALSE,

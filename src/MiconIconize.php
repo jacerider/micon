@@ -86,7 +86,7 @@ class MiconIconize extends TranslatableMarkup {
       $output = [
         '#theme' => 'micon',
         '#icon' => $icon,
-        '#text' => $return,
+        '#title' => $return,
         '#icon_only' => $this->display['iconOnly'],
         '#position' => $this->display['iconPosition'],
       ];
@@ -110,7 +110,7 @@ class MiconIconize extends TranslatableMarkup {
   }
 
   /**
-   * Show the icon before the text.
+   * Show the icon before the title.
    *
    * @return $this
    */
@@ -120,7 +120,7 @@ class MiconIconize extends TranslatableMarkup {
   }
 
   /**
-   * Show the icon before the text.
+   * Show the icon before the title.
    *
    * @return $this
    */
