@@ -1,4 +1,2 @@
-administer micon menu:
-  title: 'Administer Micon menu settings'
 use micon menu:
   title: 'Allow adding icons to menu items'

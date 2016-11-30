@@ -33,7 +33,7 @@ use Drupal\micon\MiconIcon;
  *     },
  *   },
  *   config_prefix = "micon",
- *   admin_permission = "administer site configuration",
+ *   admin_permission = "administer micon",
  *   entity_keys = {
  *     "id" = "id",
  *     "label" = "label",
