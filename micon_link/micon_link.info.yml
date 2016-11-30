@@ -1,10 +1,8 @@
 name: Micon Link
 type: module
-description: Provides a widget to allow setting icons for menu links.
+description: Provides an alternate widget for the link field that allows setting icons.
 core: 8.x
 package: Micon
 dependencies:
   - link
-  - menu_link_content
-  - menu_ui
   - micon

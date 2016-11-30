@@ -55,16 +55,6 @@ class MiconLinkWidget extends LinkWidget {
     $element = parent::formElement($items, $delta, $element, $form, $form_state);
     $build_info = $form_state->getBuildInfo();
 
-    $packages = $this->getSetting('packages');
-
-    // Since the menu link content form has no config ui, we use the global
-    // settings to limit the packages.
-    $menu_link_content_form = $build_info['base_form_id'] == 'menu_link_content_form';
-    if ($menu_link_content_form) {
-      $config = \Drupal::config('micon_link.config');
-      $packages = $config->get('packages');
-    }
-
     $item = $items[$delta];
     $options = $item->get('options')->getValue();
     $attributes = isset($options['attributes']) ? $options['attributes'] : [];
@@ -73,15 +63,18 @@ class MiconLinkWidget extends LinkWidget {
       '#type' => 'micon',
       '#title' => $this->t('Icon'),
       '#default_value' => isset($attributes['data-icon']) ? $attributes['data-icon'] : NULL,
-      '#packages' => $packages,
+      '#packages' => $this->getPackages(),
       '#element_validate' => array(array(get_called_class(), 'validateIconElement')),
     ];
 
-    if ($menu_link_content_form) {
-      $element['options']['attributes']['data-icon']['#access'] = \Drupal::currentUser()->hasPermission('use micon link');
-    }
-
     return $element;
+  }
+
+  /**
+   * Get packages available to this field.
+   */
+  protected function getPackages() {
+    return $this->getSetting('packages');
   }
 
   /**

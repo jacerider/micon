@@ -1,4 +1,0 @@
-micon.link.config:
-  route_name: micon_link.micon_link_config_form
-  base_route: entity.micon.collection
-  title: 'Link Settings'
