@@ -1,3 +1,5 @@
+![Micon](https://cloud.githubusercontent.com/assets/638651/20756168/4640dd66-b6d7-11e6-80f2-0066d01fc012.png)
+
 # Micon
 
 Provides functionality for adding [IcoMoon](https://icomoon.io) icon packages to Drupal and exposing them for use via CSS, HTML classes, and programmatically.
