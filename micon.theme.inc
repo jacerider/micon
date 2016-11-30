@@ -15,7 +15,7 @@ use Drupal\micon\MiconIconInterface;
  *
  * @param array $variables
  *   An associative array containing:
- *   - element: An associative array containing the user information and any
+ *   - element: An associative array containing the icon
  *   - attributes: HTML attributes for the containing element.
  */
 function template_preprocess_micon(array &$variables) {
@@ -37,7 +37,7 @@ function template_preprocess_micon(array &$variables) {
  *
  * @param array $variables
  *   An associative array containing:
- *   - element: An associative array containing the user information and any
+ *   - element: An associative array containing the icon
  *   - attributes: HTML attributes for the containing element.
  */
 function template_preprocess_micon_package(array &$variables) {
@@ -119,7 +119,7 @@ function _template_preprocess_micon_package__image(array &$variables) {
  *
  * @param array $variables
  *   An associative array containing:
- *   - elements: An associative array containing the user information and any
+ *   - elements: An associative array containing the icon
  *   - attributes: HTML attributes for the containing element.
  */
 function template_preprocess_micon_icon_list(array &$variables) {
@@ -185,7 +185,7 @@ function template_preprocess_micon_icon_list(array &$variables) {
  *
  * @param array $variables
  *   An associative array containing:
- *   - elements: An associative array containing the user information and any
+ *   - elements: An associative array containing the icon
  *   - attributes: HTML attributes for the containing element.
  */
 function template_preprocess_micon_icon(array &$variables) {
