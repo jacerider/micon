@@ -19,8 +19,15 @@ use Drupal\micon\MiconIconInterface;
  *   - attributes: HTML attributes for the containing element.
  */
 function template_preprocess_micon(array &$variables) {
-  $variables['MiconIcon'] = $variables['icon'];
-  $variables['icon'] = $variables['MiconIcon']->toRenderable();
+  $icon = $variables['icon'];
+  // Allow icon_id to be used as #icon.
+  if (is_string($icon)) {
+    $icon = \Drupal::service('micon.icon.manager')->getIconMatch($icon);
+  }
+  if ($icon instanceof MiconIconInterface) {
+    $variables['micon'] = $icon;
+    $variables['icon'] = $variables['micon']->toRenderable();
+  }
 }
 
 /**
