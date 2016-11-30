@@ -57,7 +57,7 @@ Add the following to the respective `repositories` and `require` sections of you
         }
     ],
     "require": {
-        "jacerider/micon": "dev-[8.x-1.x-dev]"
+        "jacerider/micon": "dev-8.x-1.x-dev"
     }
 }
 ```
