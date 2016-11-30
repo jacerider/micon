@@ -19,7 +19,7 @@ use Drupal\Core\Render\Element;
  *   '#title' => $this->t('Subject'),
  *   '#default_value' => $icon_id,
  *   '#required' => TRUE,
- *   '#packages' => ['font-awesome'],
+ *   '#packages' => ['fa'],
  * );
  * @endcode
  *
@@ -96,7 +96,7 @@ class Micon extends FormElement {
 
     // Add icon packages as options.
     $packages = \Drupal::service('micon.icon.manager')->getIcons();
-    $include = array_filter($element['#packages']);
+    $include = is_array($element['#packages']) ? array_filter($element['#packages']) : [];
     if (!empty($include)) {
       $packages = array_intersect_key($packages, $include);
     }
