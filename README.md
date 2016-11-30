@@ -1,6 +1,6 @@
 # Micon
 
-Provides functionality for adding [IcoMoon]((https://icomoon.io)) icon packages to Drupal and exposing them for use via CSS, HTML classes, and programmatically.
+Provides functionality for adding [IcoMoon](https://icomoon.io) icon packages to Drupal and exposing them for use via CSS, HTML classes, and programmatically.
 
 ## Installing
 
