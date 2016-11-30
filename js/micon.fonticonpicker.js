@@ -12,6 +12,8 @@
  * {@link https://github.com/micc83/fontIconPicker}
  */
 
+/* eslint-disable */
+
 (function ($) {
   'use strict';
   var defaults = {
@@ -63,8 +65,8 @@
     init: function () {
       this.iconPicker.addClass(this.settings.theme);
       this.iconPicker.css({left: -9999}).appendTo('body');
-      var iconPickerHeight = this.iconPicker.outerHeight(),
-        iconPickerWidth = this.iconPicker.outerWidth();
+      var iconPickerHeight = this.iconPicker.outerHeight();
+      var iconPickerWidth = this.iconPicker.outerWidth();
       this.iconPicker.css({left: ''});
       this.element.before(this.iconPicker);
       this.element.css({
@@ -83,14 +85,10 @@
       });
       if (!this.element.is('select')) {
         var ieVersion = (function () {
-          var v = 3,
-            div = document.createElement('div'),
-            a = div.all || [];
-          while (
-            div.innerHTML = '<!--[if gt IE ' + (++v) + ']><br><![endif]-->',
-            a[0]
-          ) {
-
+          var v = 3;
+          var div = document.createElement('div');
+          var a = div.all || [];
+          while (div.innerHTML = '<!--[if gt IE ' + (++v) + ']><br><![endif]-->', a[0]) {
           }
           return v > 4 ? v : !v;
         }());

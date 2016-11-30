@@ -8,6 +8,8 @@
  * @version 1.1.23
  */
 
+/* eslint-disable */
+
 /*jslint browser: true */
 /*global XDomainRequest, MutationObserver, window */
 (function () {
