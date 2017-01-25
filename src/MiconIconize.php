@@ -79,8 +79,7 @@ class MiconIconize extends TranslatableMarkup {
    * {@inheritdoc}
    */
   public function render() {
-    $return = parent::render();
-
+    $return = $this->getTitle();
     $icon = $this->getIcon();
     if ($icon) {
       $output = [
@@ -166,6 +165,16 @@ class MiconIconize extends TranslatableMarkup {
   }
 
   /**
+   * Render the object as the title only.
+   *
+   * @return string
+   *   The translated string.
+   */
+  public function getTitle() {
+    return parent::render();
+  }
+
+  /**
    * Match a string agaist definition and packages.
    *
    * Match a string against the icon definitions and then against the
@@ -188,7 +197,7 @@ class MiconIconize extends TranslatableMarkup {
   /**
    * Return cleaned and lowercase string.
    */
-  public function getMachineString() {
+  protected function getMachineString() {
     return strtolower(strip_tags($this->getUntranslatedString()));
   }
 
