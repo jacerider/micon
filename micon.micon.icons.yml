@@ -12,6 +12,12 @@ id:
 operations:
   text: operations
   icon: fa-cog
+config:
+  text: config
+  icon: fa-cog
+log:
+  text: log
+  icon: fa-terminal
 published:
   regex: ^publish
   icon: fa-circle
