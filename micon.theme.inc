@@ -28,6 +28,10 @@ function template_preprocess_micon(array &$variables) {
     $variables['micon'] = $icon;
     $variables['icon'] = $variables['micon']->toRenderable();
   }
+  else {
+    // No icon found. We don't want to render anything.
+    $variables['icon'] = '';
+  }
 }
 
 /**
