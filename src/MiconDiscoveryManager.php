@@ -18,6 +18,11 @@ class MiconDiscoveryManager extends DefaultPluginManager {
   /**
    * {@inheritdoc}
    */
+  protected $alterHook = 'micon_icons';
+
+  /**
+   * {@inheritdoc}
+   */
   protected $defaults = array(
     'text' => '',
     'regex' => '',
