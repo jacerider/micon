@@ -41,6 +41,13 @@ class MiconIconize extends TranslatableMarkup {
   protected $icon;
 
   /**
+   * The string to match within icon definitions.
+   *
+   * @var string
+   */
+  protected $matchString;
+
+  /**
    * The Icon display options.
    *
    * @var array
@@ -159,7 +166,7 @@ class MiconIconize extends TranslatableMarkup {
    */
   public function getIcon($force_match = FALSE) {
     if ($force_match || !$this->icon) {
-      $this->getMatch($this->getMachineString());
+      $this->getMatch($this->getMatchString());
     }
     return $this->icon;
   }
@@ -195,10 +202,27 @@ class MiconIconize extends TranslatableMarkup {
   }
 
   /**
+   * The machine string to use as the match when looking for icons.
+   *
+   * @param string $string
+   *   A string that will be used to search through the icon definitions as well
+   *   as the Micon icons to return a confirmed match.
+   *
+   * @return $this
+   */
+  public function setMatchString($string) {
+    $this->matchString = strtolower(strip_tags($string));
+    return $this;
+  }
+
+  /**
    * Return cleaned and lowercase string.
    */
-  protected function getMachineString() {
-    return strtolower(strip_tags($this->getUntranslatedString()));
+  protected function getMatchString() {
+    if (!isset($this->matchString)) {
+      $this->setMatchString($this->getUntranslatedString());
+    }
+    return $this->matchString;
   }
 
 }
