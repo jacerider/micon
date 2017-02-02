@@ -1,6 +1,6 @@
 name: Micon Menu
 type: module
-description: Provides a ability to set icons for menu link content.
+description: Provides the ability to set icons for menu link content.
 core: 8.x
 package: Micon
 dependencies:
