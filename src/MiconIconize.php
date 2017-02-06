@@ -48,6 +48,13 @@ class MiconIconize extends TranslatableMarkup {
   protected $matchString;
 
   /**
+   * The match prefix to append to the match string.
+   *
+   * @var string
+   */
+  protected $matchPrefix = '';
+
+  /**
    * The Icon display options.
    *
    * @var array
@@ -202,6 +209,30 @@ class MiconIconize extends TranslatableMarkup {
   }
 
   /**
+   * The prefix that will be appended to the match string.
+   *
+   * @param string $string
+   *   A string that will be appended to the match string. This is useful when
+   *   you want to provide icons with more specific replacements.
+   *
+   * @return $this
+   */
+  public function setMatchPrefix($string) {
+    $this->matchPrefix = $string . '.';
+    return $this;
+  }
+
+  /**
+   * Return the match prefix.
+   *
+   * @return string
+   *   The match prefix.
+   */
+  public function getMatchPrefix() {
+    return $this->matchPrefix;
+  }
+
+  /**
    * The machine string to use as the match when looking for icons.
    *
    * @param string $string
@@ -211,7 +242,10 @@ class MiconIconize extends TranslatableMarkup {
    * @return $this
    */
   public function setMatchString($string) {
-    $this->matchString = strtolower(strip_tags($string));
+    if (is_a($string, '\Drupal\Core\StringTranslation\TranslatableMarkup')) {
+      $string = $string->getUntranslatedString();
+    }
+    $this->matchString = strtolower(strip_tags($this->getMatchPrefix() . $string));
     return $this;
   }
 
