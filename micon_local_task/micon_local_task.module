@@ -32,7 +32,7 @@ function micon_local_task_menu_local_tasks_alter(&$data, $route_name) {
     foreach ($data['tabs'] as &$group) {
       foreach ($group as &$tab) {
         $title = $tab['#link']['title'];
-        $tab['#link']['title'] = micon($title)->setMatchPrefix('local_task')->setIconOnly($config->get('icon_only'));
+        $tab['#link']['title'] = micon($title)->addMatchPrefix('local_task')->setIconOnly($config->get('icon_only'));
       }
     }
   }

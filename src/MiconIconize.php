@@ -50,9 +50,9 @@ class MiconIconize extends TranslatableMarkup {
   /**
    * The match prefix to append to the match string.
    *
-   * @var string
+   * @var array
    */
-  protected $matchPrefix = '';
+  protected $matchPrefix = [''];
 
   /**
    * The Icon display options.
@@ -202,8 +202,11 @@ class MiconIconize extends TranslatableMarkup {
    *   The MiconIcon if found, else null.
    */
   public function getMatch($string) {
-    if ($icon_id = $this->miconDiscoveryManager->getDefinitionMatch($string)) {
-      $this->setIcon($icon_id);
+    foreach ($this->getMatchPrefix() as $prefix) {
+      if ($icon_id = $this->miconDiscoveryManager->getDefinitionMatch($prefix . $string)) {
+        $this->setIcon($icon_id);
+        break;
+      }
     }
     return $this->icon;
   }
@@ -217,8 +220,8 @@ class MiconIconize extends TranslatableMarkup {
    *
    * @return $this
    */
-  public function setMatchPrefix($string) {
-    $this->matchPrefix = $string . '.';
+  public function addMatchPrefix($string) {
+    $this->matchPrefix[] = $string . '.';
     return $this;
   }
 
@@ -245,7 +248,7 @@ class MiconIconize extends TranslatableMarkup {
     if (is_a($string, '\Drupal\Core\StringTranslation\TranslatableMarkup')) {
       $string = $string->getUntranslatedString();
     }
-    $this->matchString = strtolower(strip_tags($this->getMatchPrefix() . $string));
+    $this->matchString = strtolower(strip_tags($string));
     return $this;
   }
 
