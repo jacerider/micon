@@ -39,6 +39,24 @@ class MiconMenuWidget extends MiconLinkWidget {
   }
 
   /**
+   * Recursively clean up options array if no data-icon is set.
+   */
+  public static function validateIconElement($element, FormStateInterface $form_state, $form) {
+    parent::validateIconElement($element, $form_state, $form);
+    if ($values = $form_state->getValue('link')) {
+      foreach ($values as $value) {
+        // Support menu_link_attributes module.
+        if ($attributes = $form_state->getValue('attributes')) {
+          if (!empty($value['options']['attributes'])) {
+            $attributes += $value['options']['attributes'];
+            $form_state->setValue('attributes', $attributes);
+          }
+        }
+      }
+    }
+  }
+
+  /**
    * {@inheritdoc}
    */
   public static function isApplicable(FieldDefinitionInterface $field_definition) {
