@@ -46,7 +46,7 @@ function micon_menu_entity_base_field_info_alter(&$fields, EntityTypeInterface $
 function micon_menu_module_implements_alter(&$implementations, $hook) {
   if ($hook == 'form_node_form_alter') {
     unset($implementations['menu_ui']);
-    // Move micon_link_form_node_form_alter() to the end of the list.
+    // Move micon_menu_form_node_form_alter() to the end of the list.
     $group = $implementations['micon_menu'];
     unset($implementations['micon_menu']);
     $implementations['micon_menu'] = $group;
