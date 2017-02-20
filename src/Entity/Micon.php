@@ -296,7 +296,9 @@ class Micon extends ConfigEntityBase implements MiconInterface {
       $files_to_rename = $directory . '/fonts/*.*';
       foreach (glob(drupal_realpath($files_to_rename)) as $file_to_rename_path) {
         $file_new_path = str_replace($this->getName(), $this->id(), $file_to_rename_path);
-        file_unmanaged_move($file_to_rename_path, $file_new_path);
+        if ($file_to_rename_path !== $file_new_path) {
+          file_unmanaged_move($file_to_rename_path, $file_new_path);
+        }
       }
     }
 
