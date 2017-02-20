@@ -44,10 +44,10 @@ local_task.uninstall:
   icon: fa-trash
 local_task.manage_fields:
   text: local_task.manage fields
-  icon: fa-pencil-square-o
+  icon: fa-pencil-square
 local_task.manage_form_display:
   text: local_task.manage form display
-  icon: fa-check-square-o
+  icon: fa-check-square
 local_task.manage_display:
   text: local_task.manage display
   icon: fa-desktop
