@@ -14,7 +14,7 @@ local_task.revision:
   icon: fa-history
 local_task.devel:
   text: local_task.devel
-  icon: fa-code
+  icon: fa-terminal
 local_task.translate:
   text: local_task.translate
   icon: fa-language
@@ -72,3 +72,27 @@ local_task.import:
 local_task.export:
   regex: ^local_task.export
   icon: fa-upload
+local_task.access:
+  regex: ^local_task.access
+  icon: fa-lock
+local_task.css:
+  regex: ^local_task.css
+  icon: fa-file-code-o
+local_task.js:
+  regex: ^local_task.js
+  icon: fa-file-code-o
+local_task.elements:
+  regex: ^local_task.elements
+  icon: fa-cubes
+local_task.element:
+  regex: ^local_task.element
+  icon: fa-cube
+local_task.email:
+  regex: ^local_task.email
+  icon: fa-envelope
+local_task.third_party:
+  regex: ^local_task.third party
+  icon: fa-code-fork
+local_task.source:
+  regex: ^local_task.source
+  icon: fa-code
