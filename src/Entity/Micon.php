@@ -305,9 +305,18 @@ class Micon extends ConfigEntityBase implements MiconInterface {
     // Update IcoMoon selection.json.
     $file_path = $directory . '/selection.json';
     $file_contents = file_get_contents($file_path);
+    // Protect icon keys
+    $file_contents = str_replace('"icons":', 'MICONSIcons', $file_contents);
+    $file_contents = str_replace('"icon":', 'MICONIcon', $file_contents);
+    $file_contents = str_replace('iconIdx', 'MICONIdx', $file_contents);
+    $file_contents = str_replace($this->getPrefix(), 'MICONPrefix', $file_contents);
     // The name and selector should be updated to match entity info.
-    $file_contents = str_replace($this->getPrefix(), $this->id() . '-', $file_contents);
     $file_contents = str_replace($this->getName(), $this->id(), $file_contents);
+    // Return protected keys
+    $file_contents = str_replace('MICONSIcons', '"icons":', $file_contents);
+    $file_contents = str_replace('MICONIcon', '"icon":', $file_contents);
+    $file_contents = str_replace('MICONIdx', 'iconIdx', $file_contents);
+    $file_contents = str_replace('MICONPrefix', $this->id() . '-', $file_contents);
     file_put_contents($file_path, $file_contents);
 
     // Update IcoMoon stylesheet.
@@ -317,9 +326,13 @@ class Micon extends ConfigEntityBase implements MiconInterface {
     // loads in the font files. Drupal CSS aggregation doesn't handle this well
     // so we need to remove it.
     $file_contents = preg_replace('(\?[a-zA-Z0-9#\-\_]*)', '', $file_contents);
+    // Protect prefixes.
+    $file_contents = str_replace($this->getPrefix(), 'MICON', $file_contents);
     // The name and selector should be updated to match entity info.
-    $file_contents = str_replace($this->getPrefix(), $this->id() . '-', $file_contents);
     $file_contents = str_replace($this->getName(), $this->id(), $file_contents);
+    // Return changed prefixes. This prevents something like m-icon from
+    // becoming m-icon-icon.
+    $file_contents = str_replace('MICON', $this->id() . '-', $file_contents);
     file_put_contents($file_path, $file_contents);
   }
 
