@@ -64,9 +64,9 @@ function micon_content_type_micon_icons_alter(&$icons) {
   $types = \Drupal::entityTypeManager()->getStorage('node_type')->loadMultiple();
   foreach ($types as $type) {
     if ($icon = micon_content_type_icon($type)) {
-      $id = 'content_type:' . $type->id();
+      $id = 'content_type.' . $type->id();
       $icons[$id] = [
-        'text' => 'content_type:' . strtolower($type->label()),
+        'text' => 'content_type.' . strtolower($type->label()),
         'icon' => $icon,
         'id' => $id,
       ] + $defaults;
