@@ -167,12 +167,59 @@ function _micon_menu_menu_ui_node_save(NodeInterface $node, array $values) {
  * Implements hook_preprocess_menu().
  */
 function micon_menu_preprocess_menu(&$variables) {
-  foreach ($variables['items'] as &$item) {
+  $variables['items'] = _micon_menu_preprocess_menu_items($variables['items']);
+}
+
+/**
+ * Helper function to iterate over each menu item and utilize icon.
+ */
+function _micon_menu_preprocess_menu_items($items) {
+  foreach ($items as &$item) {
     $options = $item['url']->getOptions();
     if (!empty($options['attributes']['data-icon'])) {
       $item['title'] = MiconIconize::iconize($item['title'])->setIcon($options['attributes']['data-icon'])->render();
       unset($options['attributes']['data-icon']);
       $item['url']->setOptions($options);
     }
+    if (!empty($item['below'])) {
+      $item['below'] = _micon_menu_preprocess_menu_items($item['below']);
+    }
+  }
+  return $items;
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function micon_menu_form_menu_link_edit_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $options = $form_state->getBuildInfo()['args'][0]->getOptions();
+  $config = \Drupal::config('micon_menu.config');
+  $form['path']['link']['data-icon'] = [
+    '#type' => 'micon',
+    '#title' => t('Icon'),
+    '#default_value' => isset($options['attributes']['data-icon']) ? $options['attributes']['data-icon'] : NULL,
+    '#packages' => $config->get('packages'),
+    '#access' => \Drupal::currentUser()->hasPermission('use micon link'),
+  ];
+  $form['#submit'][] = '_micon_menu_form_menu_link_edit_alter_submit';
+}
+
+/**
+ * Process the submitted form.
+ *
+ * @param array $form
+ *   An associative array containing the structure of the form.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The current state of the form.
+ */
+function _micon_menu_form_menu_link_edit_alter_submit($form, FormStateInterface $form_state) {
+  $options = $form_state->getBuildInfo()['args'][0]->getOptions();
+  $menu_link_id = $form_state->getValue('menu_link_id');
+  if (!empty($menu_link_id)) {
+    $menu_link_manager = \Drupal::service('plugin.manager.menu.link');
+    $icon = $form_state->getValue('data-icon');
+    $menu_link_manager->updateDefinition($menu_link_id, [
+      'data-icon' => $icon,
+    ]);
   }
 }
