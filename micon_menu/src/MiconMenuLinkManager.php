@@ -10,19 +10,21 @@ use Drupal\Core\Menu\MenuLinkManager;
 class MiconMenuLinkManager extends MenuLinkManager {
 
   /**
-   * {@inheritdoc}
+   * Performs extra processing on plugin definitions.
+   *
+   * By default we add defaults for the type to the definition. If a type has
+   * additional processing logic, the logic can be added by replacing or
+   * extending this method.
+   *
+   * @param array $definition
+   *   The definition to be processed and modified by reference.
+   * @param $plugin_id
+   *   The ID of the plugin this definition is being used for.
    */
-  public function updateDefinition($id, array $new_definition_values, $persist = TRUE) {
-    $instance = $this->createInstance($id);
-    if ($instance) {
-      $new_definition_values['id'] = $id;
-      $changed_definition = $instance->updateLink($new_definition_values, $persist);
-      if (isset($new_definition_values['data-icon'])) {
-        $changed_definition['options']['attributes']['data-icon'] = $new_definition_values['data-icon'];
-      }
-      $this->treeStorage->save($changed_definition);
-    }
-    return $instance;
+  protected function processDefinition(array &$definition, $plugin_id) {
+    // Use the micon link class override.
+    $this->default['class'] = 'Drupal\micon_menu\MiconMenuLinkDefault';
+    parent::processDefinition($definition, $plugin_id);
   }
 
 }

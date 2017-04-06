@@ -54,6 +54,13 @@ function micon_menu_module_implements_alter(&$implementations, $hook) {
 }
 
 /**
+ * Implements hook_menu_links_discovered_alter().
+ */
+function micon_menu_menu_links_discovered_alter(&$links) {
+  $links['user.logout']['class'] = 'Drupal\micon_menu\MiconLoginLogoutMenuLink';
+}
+
+/**
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function micon_menu_form_node_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
@@ -154,6 +161,9 @@ function _micon_menu_menu_ui_node_save(NodeInterface $node, array $values) {
     ));
     $entity->enabled->value = 1;
   }
+  // Clean up options.
+  $values['options'] = array_filter($values['options']['attributes']);
+
   $entity->title->value = trim($values['title']);
   $entity->description->value = trim($values['description']);
   $entity->link->options = $values['options'];
@@ -218,8 +228,6 @@ function _micon_menu_form_menu_link_edit_alter_submit($form, FormStateInterface 
   if (!empty($menu_link_id)) {
     $menu_link_manager = \Drupal::service('plugin.manager.menu.link');
     $icon = $form_state->getValue('data-icon');
-    $menu_link_manager->updateDefinition($menu_link_id, [
-      'data-icon' => $icon,
-    ]);
+    $menu_link_manager->updateDefinition($menu_link_id,  ['options' => ['attributes' => ['data-icon' => $icon]]]);
   }
 }
