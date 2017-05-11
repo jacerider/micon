@@ -143,7 +143,7 @@ class Micon extends ConfigEntityBase implements MiconInterface {
    */
   public function getIcons() {
     if (empty($this->icons) && $info = $this->getInfo()) {
-      $this->icons = array();
+      $this->icons = [];
       foreach ($info['icons'] as $icon) {
         foreach ($icon['icon']['tags'] as $tag) {
           $icon['tag'] = $tag;
@@ -270,7 +270,7 @@ class Micon extends ConfigEntityBase implements MiconInterface {
   public function archiveExtract($zip_path) {
     $archiver = archiver_get_archiver($zip_path);
     if (!$archiver) {
-      throw new Exception(t('Cannot extract %file, not a valid archive.', array('%file' => $zip_path)));
+      throw new Exception(t('Cannot extract %file, not a valid archive.', ['%file' => $zip_path]));
     }
 
     $directory = $this->getDirectory();
@@ -293,11 +293,13 @@ class Micon extends ConfigEntityBase implements MiconInterface {
       file_put_contents($file_path, $file_contents);
     }
     else {
-      $files_to_rename = $directory . '/fonts/*.*';
+      $font_directory = $directory . '/fonts';
+      $files_to_rename = $font_directory . '/*.*';
       foreach (glob(drupal_realpath($files_to_rename)) as $file_to_rename_path) {
-        $file_new_path = str_replace($this->getName(), $this->id(), $file_to_rename_path);
+        $file_new_path = str_replace('fonts/' . $this->getName(), 'fonts/' . $this->id(), $file_to_rename_path);
         if ($file_to_rename_path !== $file_new_path) {
-          file_unmanaged_move($file_to_rename_path, $file_new_path);
+
+          file_unmanaged_move($file_to_rename_path, $file_new_path, FILE_EXISTS_REPLACE);
         }
       }
     }
@@ -305,14 +307,14 @@ class Micon extends ConfigEntityBase implements MiconInterface {
     // Update IcoMoon selection.json.
     $file_path = $directory . '/selection.json';
     $file_contents = file_get_contents($file_path);
-    // Protect icon keys
+    // Protect icon keys.
     $file_contents = str_replace('"icons":', 'MICONSIcons', $file_contents);
     $file_contents = str_replace('"icon":', 'MICONIcon', $file_contents);
     $file_contents = str_replace('iconIdx', 'MICONIdx', $file_contents);
     $file_contents = str_replace($this->getPrefix(), 'MICONPrefix', $file_contents);
     // The name and selector should be updated to match entity info.
     $file_contents = str_replace($this->getName(), $this->id(), $file_contents);
-    // Return protected keys
+    // Return protected keys.
     $file_contents = str_replace('MICONSIcons', '"icons":', $file_contents);
     $file_contents = str_replace('MICONIcon', '"icon":', $file_contents);
     $file_contents = str_replace('MICONIdx', 'iconIdx', $file_contents);
