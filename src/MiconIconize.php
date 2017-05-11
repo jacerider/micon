@@ -69,6 +69,9 @@ class MiconIconize extends TranslatableMarkup {
    */
   public function __construct($string, array $arguments = array(), array $options = array(), TranslationInterface $string_translation = NULL) {
     if (is_a($string, '\Drupal\Core\StringTranslation\TranslatableMarkup')) {
+      $arguments = $string->getArguments();
+      $options = $string->getOptions();
+      $string_translation = $string->getStringTranslation();
       $string = $string->getUntranslatedString();
     }
     parent::__construct($string, $arguments, $options, $string_translation);
