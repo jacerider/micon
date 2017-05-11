@@ -192,7 +192,7 @@ function template_preprocess_micon_icon_list(array &$variables) {
  *   - attributes: HTML attributes for the containing element.
  */
 function template_preprocess_micon_icon(array &$variables) {
-  $icon = $variables['element']['#icon'];
+  $icon = $variables['icon'];
   $variables['tag'] = 'span';
   $variables['attributes']['class'][] = 'micon';
   // Allow icon_id to be used as #icon.

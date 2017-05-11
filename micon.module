@@ -40,7 +40,9 @@ function micon_theme($existing, $type, $theme, $path) {
     'file' => 'micon.theme.inc',
   );
   $themes['micon_icon'] = array(
-    'render element' => 'element',
+    'variables' => [
+      'icon' => NULL,
+    ],
     'file' => 'micon.theme.inc',
   );
   $themes['micon_package'] = array(
@@ -66,7 +68,7 @@ function micon_theme($existing, $type, $theme, $path) {
  * Implements hook_theme_suggestions_HOOK().
  */
 function micon_theme_suggestions_micon_icon(array $variables) {
-  $icon = $variables['element']['#icon'];
+  $icon = $variables['icon'];
   if (is_string($icon)) {
     $icon = \Drupal::service('micon.icon.manager')->getIconMatch($icon);
   }
