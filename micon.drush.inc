@@ -17,7 +17,7 @@ function micon_drush_command() {
       'path'         => 'The destination where the _micon.scss mixin file should be created. Do not include a trailing slash.',
     ),
     'examples' => array(
-      'drush micon themes/my_theme/src/scss/base' => 'Creates the SCSS mixin file and places it within SITE_ROOT/themes/my_theme/src/scss/base',
+      'drush micon "themes/my_theme/src/scss/base"' => 'Creates the SCSS mixin file and places it within SITE_ROOT/themes/my_theme/src/scss/base',
     ),
   );
 
@@ -45,7 +45,13 @@ function drush_micon($path = NULL) {
     return;
   }
 
-  $fullpath = drush_normalize_path(drush_get_context('DRUSH_DRUPAL_ROOT') . '/' . $path . '/_micon.scss');
+  $path = drush_get_context('DRUSH_DRUPAL_ROOT') . '/' . $path;
+  if (!file_exists($path)) {
+    drush_print(dt('Location directory not found. See help using drush micon --help.'));
+    return;
+  }
+
+  $fullpath = $path . '/_micon.scss';
   $miconIconManager = \Drupal::service('micon.icon.manager');
 
   $content = [];
