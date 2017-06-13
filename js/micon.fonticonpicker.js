@@ -21,7 +21,7 @@
     source: false,
     emptyIcon: true,
     emptyIconValue: '',
-    iconsPerPage: 20,
+    iconsPerPage: 36,
     hasSearch: true,
     searchSource: false,
     allCategoryText: 'From all categories',

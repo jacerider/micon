@@ -67,7 +67,7 @@
 /* Selected icon */
 .icons-selector .selected-icon .micon {
   line-height: 40px;
-  font-size: 18px;
+  font-size: 30px;
   cursor: default;
 }
 
@@ -78,7 +78,7 @@
   background-color: #fefefe;
   padding: 5px;
   height: auto;
-  width: 342px;
+  width: 528px;
   margin-top: -1px;
 }
 
@@ -156,12 +156,21 @@
 .icons-selector .fip-box {
   display: inline-block;
   margin: 2px;
-  width: 60px;
-  line-height: 42px;
+  width: 80px;
+  line-height: 62px;
   text-align: center;
   cursor: pointer;
   vertical-align: top;
-  height: 40px;
+  height: 60px;
+}
+
+.icons-selector .fip-box .micon {
+  line-height: 62px;
+  font-size: 30px;
+}
+
+.icons-selector .micon:before {
+  color: #252525;
 }
 
 /* Popup footer */
