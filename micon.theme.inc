@@ -26,11 +26,39 @@ function template_preprocess_micon(array &$variables) {
   }
   if ($icon instanceof MiconIconInterface) {
     $variables['micon'] = $icon;
-    $variables['icon'] = $variables['micon']->toRenderable();
+    $variables['icon'] = $variables['micon']->setAttributes($variables['icon_attributes'])->toRenderable();
   }
   else {
     // No icon found. We don't want to render anything.
     $variables['icon'] = '';
+  }
+}
+
+/**
+ * Prepares variables for the Micon icon template.
+ *
+ * Default template: micon-icon-font.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the icon
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_micon_icon(array &$variables) {
+  $icon = $variables['icon'];
+  $variables['tag'] = 'span';
+  $variables['attributes']['class'][] = 'micon';
+  // Allow icon_id to be used as #icon.
+  if (is_string($icon)) {
+    $icon = \Drupal::service('micon.icon.manager')->getIconMatch($icon);
+  }
+  if ($icon instanceof MiconIconInterface) {
+    $variables['icon'] = $icon;
+    $variables['type'] = $icon->getType();
+    $variables['tag'] = $icon->getWrappingElement();
+    $variables['attributes']['class'][] = $icon->getSelector();
+    $variables['attributes']['aria-hidden'] = 'true';
+    $variables['children'] = $icon->getChildren();
   }
 }
 
@@ -178,33 +206,5 @@ function template_preprocess_micon_icon_list(array &$variables) {
         '#attributes' => ['class' => ['info']],
       ];
     }
-  }
-}
-
-/**
- * Prepares variables for the Micon icon template.
- *
- * Default template: micon-icon-font.html.twig.
- *
- * @param array $variables
- *   An associative array containing:
- *   - elements: An associative array containing the icon
- *   - attributes: HTML attributes for the containing element.
- */
-function template_preprocess_micon_icon(array &$variables) {
-  $icon = $variables['icon'];
-  $variables['tag'] = 'span';
-  $variables['attributes']['class'][] = 'micon';
-  // Allow icon_id to be used as #icon.
-  if (is_string($icon)) {
-    $icon = \Drupal::service('micon.icon.manager')->getIconMatch($icon);
-  }
-  if ($icon instanceof MiconIconInterface) {
-    $variables['icon'] = $icon;
-    $variables['type'] = $icon->getType();
-    $variables['tag'] = $icon->getWrappingElement();
-    $variables['attributes']['class'][] = $icon->getSelector();
-    $variables['attributes']['aria-hidden'] = 'true';
-    $variables['children'] = $icon->getChildren();
   }
 }

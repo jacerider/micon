@@ -80,6 +80,38 @@ interface MiconIconInterface {
   public function getChildren();
 
   /**
+   * Sets attributes.
+   *
+   * @param array $attributes
+   *   An attributes array.
+   *
+   * @return $this
+   */
+  public function setAttributes(array $attributes);
+
+  /**
+   * Sets values for an attribute key.
+   *
+   * @param string $attribute
+   *   Name of the attribute.
+   * @param string|array $value
+   *   Value(s) to set for the given attribute key.
+   *
+   * @return $this
+   */
+  public function setAttribute($attribute, $value);
+
+  /**
+   * Adds classes or merges them on to array of existing CSS classes.
+   *
+   * @param string|array ...
+   *   CSS classes to add to the class attribute array.
+   *
+   * @return $this
+   */
+  public function addClass($classes);
+
+  /**
    * Returns a render array representation of the object.
    *
    * @return mixed[]

@@ -29,38 +29,41 @@ function micon_help($route_name, RouteMatchInterface $route_match) {
  * Implements hook_theme().
  */
 function micon_theme($existing, $type, $theme, $path) {
-  $themes = array();
-  $themes['micon'] = array(
+  $themes = [];
+  $themes['micon'] = [
     'variables' => [
       'title' => NULL,
-      'icon' => NULL,
+      'attributes' => [],
       'position' => 'before',
+      'icon' => NULL,
       'icon_only' => FALSE,
+      'icon_attributes' => [],
     ],
     'file' => 'micon.theme.inc',
-  );
-  $themes['micon_icon'] = array(
+  ];
+  $themes['micon_icon'] = [
     'variables' => [
       'icon' => NULL,
+      'attributes' => [],
     ],
     'file' => 'micon.theme.inc',
-  );
-  $themes['micon_package'] = array(
+  ];
+  $themes['micon_package'] = [
     'render element' => 'element',
     'file' => 'micon.theme.inc',
-  );
-  $themes['micon_icon_list'] = array(
+  ];
+  $themes['micon_icon_list'] = [
     'render element' => 'element',
     'file' => 'micon.theme.inc',
-  );
-  $themes['micon_icon_font'] = array(
+  ];
+  $themes['micon_icon_font'] = [
     'render element' => 'element',
     'file' => 'micon.theme.inc',
-  );
-  $themes['micon_icon_image'] = array(
+  ];
+  $themes['micon_icon_image'] = [
     'render element' => 'element',
     'file' => 'micon.theme.inc',
-  );
+  ];
   return $themes;
 }
 
@@ -122,6 +125,6 @@ function micon_library_info_build() {
  *
  * @ingroup sanitization
  */
-function micon($string, array $args = array(), array $options = array()) {
+function micon($string, array $args = [], array $options = []) {
   return new MiconIconize($string, $args, $options);
 }

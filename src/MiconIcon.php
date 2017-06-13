@@ -2,6 +2,7 @@
 
 namespace Drupal\micon;
 
+use Drupal\Core\Template\Attribute;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Render\RenderableInterface;
 
@@ -25,16 +26,26 @@ class MiconIcon implements MiconIconInterface, RenderableInterface {
   protected $data;
 
   /**
+   * The Attribute object.
+   *
+   * @var \Drupal\Core\Template\Attribute
+   */
+  protected $attributes;
+
+  /**
    * Constructs a new MiconIcon.
    *
    * @param string $type
    *   The type of icon. Either 'font' or 'image'.
    * @param array $data
    *   The icon data array provided from the Micon package info file.
+   * @param array $attributes
+   *   The attributes to add to the group wrapper.
    */
-  public function __construct($type, array $data) {
+  public function __construct($type, array $data, array $attributes = []) {
     $this->type = $type;
     $this->data = $data;
+    $this->setAttributes($attributes);
   }
 
   /**
@@ -120,10 +131,35 @@ class MiconIcon implements MiconIconInterface, RenderableInterface {
   /**
    * {@inheritdoc}
    */
+  public function addClass($classes) {
+    $this->attributes->addClass($classes);
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setAttributes(array $attributes) {
+    $this->attributes = new Attribute($attributes);
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setAttribute($attribute, $value) {
+    $this->attributes->setAttribute($attribute, $value);
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function toRenderable() {
     return [
       '#theme' => 'micon_icon',
       '#icon' => $this,
+      '#attributes' => $this->attributes->toArray(),
     ];
   }
 
