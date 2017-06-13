@@ -4,6 +4,7 @@ namespace Drupal\micon;
 
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\StringTranslation\TranslationInterface;
+use Drupal\Core\Render\Markup;
 
 /**
  * Class MiconIconize.
@@ -102,7 +103,7 @@ class MiconIconize extends TranslatableMarkup {
       $output = [
         '#theme' => 'micon',
         '#icon' => $icon,
-        '#title' => $return,
+        '#title' => Markup::create($return),
         '#icon_only' => $this->display['iconOnly'],
         '#position' => $this->display['iconPosition'],
       ];
