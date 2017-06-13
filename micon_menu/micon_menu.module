@@ -36,6 +36,9 @@ function micon_menu_entity_base_field_info_alter(&$fields, EntityTypeInterface $
     $fields['link']->setDisplayOptions('form', [
       'type' => 'micon_menu',
       'weight' => -2,
+      'settings' => [
+        'target' => TRUE,
+      ],
     ]);
   }
 }
@@ -155,10 +158,10 @@ function _micon_menu_menu_ui_node_save(NodeInterface $node, array $values) {
   }
   else {
     // Create a new menu_link_content entity.
-    $entity = MenuLinkContent::create(array(
+    $entity = MenuLinkContent::create([
       'link' => ['uri' => 'entity:node/' . $node->id()],
       'langcode' => $node->language()->getId(),
-    ));
+    ]);
     $entity->enabled->value = 1;
   }
   // Clean up options.
@@ -222,12 +225,12 @@ function micon_menu_form_menu_link_edit_alter(&$form, FormStateInterface $form_s
  * @param \Drupal\Core\Form\FormStateInterface $form_state
  *   The current state of the form.
  */
-function _micon_menu_form_menu_link_edit_alter_submit($form, FormStateInterface $form_state) {
+function _micon_menu_form_menu_link_edit_alter_submit(array $form, FormStateInterface $form_state) {
   $options = $form_state->getBuildInfo()['args'][0]->getOptions();
   $menu_link_id = $form_state->getValue('menu_link_id');
   if (!empty($menu_link_id)) {
     $menu_link_manager = \Drupal::service('plugin.manager.menu.link');
     $icon = $form_state->getValue('data-icon');
-    $menu_link_manager->updateDefinition($menu_link_id,  ['options' => ['attributes' => ['data-icon' => $icon]]]);
+    $menu_link_manager->updateDefinition($menu_link_id, ['options' => ['attributes' => ['data-icon' => $icon]]]);
   }
 }
