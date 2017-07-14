@@ -68,7 +68,7 @@ class MiconIconize extends TranslatableMarkup {
   /**
    * {@inheritdoc}
    */
-  public function __construct($string, array $arguments = array(), array $options = array(), TranslationInterface $string_translation = NULL) {
+  public function __construct($string = '', array $arguments = [], array $options = [], TranslationInterface $string_translation = NULL) {
     if (is_a($string, '\Drupal\Core\StringTranslation\TranslatableMarkup')) {
       $arguments = $string->getArguments();
       $options = $string->getOptions();
@@ -84,7 +84,7 @@ class MiconIconize extends TranslatableMarkup {
   /**
    * Return a class instance.
    */
-  public static function iconize($string, array $arguments = array(), array $options = array(), TranslationInterface $string_translation = NULL) {
+  public static function iconize($string = '', array $arguments = [], array $options = [], TranslationInterface $string_translation = NULL) {
     return new static(
       $string,
       $arguments,
@@ -100,13 +100,21 @@ class MiconIconize extends TranslatableMarkup {
     $return = $this->getTitle();
     $icon = $this->getIcon();
     if ($icon) {
-      $output = [
-        '#theme' => 'micon',
-        '#icon' => $icon,
-        '#title' => Markup::create($return),
-        '#icon_only' => $this->display['iconOnly'],
-        '#position' => $this->display['iconPosition'],
-      ];
+      if (!$return) {
+        $output = [
+          '#theme' => 'micon_icon',
+          '#icon' => $icon,
+        ];
+      }
+      else {
+        $output = [
+          '#theme' => 'micon',
+          '#icon' => $icon,
+          '#title' => Markup::create($return),
+          '#icon_only' => $this->display['iconOnly'],
+          '#position' => $this->display['iconPosition'],
+        ];
+      }
       return $this->renderer->render($output);
     }
 
