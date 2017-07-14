@@ -81,6 +81,8 @@ class MiconLinkWidget extends LinkWidget {
         '#title' => t('Open link in new window'),
         '#description' => t('If selected, the menu link will open in a new window/tab when clicked.'),
         '#default_value' => isset($attributes['target']),
+        '#return_value' => '_blank',
+        // '#element_validate' => [[get_called_class(), 'validateTargetElement']],
       ];
     }
 
@@ -98,26 +100,24 @@ class MiconLinkWidget extends LinkWidget {
    * Recursively clean up options array if no data-icon is set.
    */
   public static function validateIconElement($element, FormStateInterface $form_state, $form) {
-    if ($values = $form_state->getValue('link')) {
-      foreach ($values as &$value) {
-        if (empty($value['options']['attributes']['data-icon'])) {
-          unset($value['options']['attributes']['data-icon']);
-        }
-        if (!empty($value['options']['attributes']['target'])) {
-          $value['options']['attributes']['target'] = '_blank';
+    $parents = array_slice($element['#parents'], 0, -3);
+    $values = $form_state->getValue($parents);
+    ksm($values);
+    if (!empty($values)) {
+      foreach ($values['attributes'] as $attribute => $value) {
+        if (!empty($value[$attribute])) {
+          $values['options']['attributes'][$attribute] = $value[$attribute];
         }
         else {
-          unset($value['options']['attributes']['target']);
-        }
-        if (empty($value['options']['attributes'])) {
-          unset($value['options']['attributes']);
-        }
-        if (empty($value['options'])) {
-          unset($value['options']);
+          unset($values['options']['attributes'][$attribute]);
         }
       }
-      $form_state->setValue('link', $values);
     }
+    else {
+      unset($values['options']['attributes']['data-icon']);
+      unset($values['options']['attributes']['target']);
+    }
+    $form_state->setValue($parents, $values);
   }
 
   /**
