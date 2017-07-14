@@ -125,6 +125,6 @@ function micon_library_info_build() {
  *
  * @ingroup sanitization
  */
-function micon($string, array $args = [], array $options = []) {
+function micon($string = '', array $args = [], array $options = []) {
   return new MiconIconize($string, $args, $options);
 }
