@@ -102,7 +102,6 @@ class MiconLinkWidget extends LinkWidget {
   public static function validateIconElement($element, FormStateInterface $form_state, $form) {
     $parents = array_slice($element['#parents'], 0, -3);
     $values = $form_state->getValue($parents);
-    ksm($values);
     if (!empty($values)) {
       foreach ($values['attributes'] as $attribute => $value) {
         if (!empty($value[$attribute])) {
