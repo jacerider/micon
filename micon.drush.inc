@@ -74,6 +74,7 @@ function drush_micon($path = NULL) {
   $content[] = '    font-variant: normal;';
   $content[] = '    text-transform: none;';
   $content[] = '    line-height: 1;';
+  $content[] = '    vertical-align: middle;';
   $content[] = '    -webkit-font-smoothing: antialiased; // sass-lint:disable-line no-vendor-prefixes';
   $content[] = '    -moz-osx-font-smoothing: grayscale; // sass-lint:disable-line no-vendor-prefixes';
   $content[] = '    content: "#{map-get($micons, #{$package}-#{$icon})}"; // sass-lint:disable-line quotes';
