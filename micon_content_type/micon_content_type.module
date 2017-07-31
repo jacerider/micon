@@ -70,6 +70,11 @@ function micon_content_type_micon_icons_alter(&$icons) {
         'icon' => $icon,
         'id' => $id,
       ] + $defaults;
+      $icons[$id . '_bundle'] = [
+        'text' => 'content_type.' . $type->id(),
+        'icon' => $icon,
+        'id' => $id,
+      ] + $defaults;
     }
   }
 }
