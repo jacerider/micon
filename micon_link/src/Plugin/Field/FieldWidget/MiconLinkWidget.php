@@ -61,6 +61,7 @@ class MiconLinkWidget extends LinkWidget {
    */
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
     $element = parent::formElement($items, $delta, $element, $form, $form_state);
+    $element['#element_validate'][] = [get_called_class(), 'validateElement'];
     $element['title']['#weight'] = -1;
 
     $item = $items[$delta];
@@ -72,17 +73,16 @@ class MiconLinkWidget extends LinkWidget {
       '#title' => $this->t('Icon'),
       '#default_value' => isset($attributes['data-icon']) ? $attributes['data-icon'] : NULL,
       '#packages' => $this->getPackages(),
-      '#element_validate' => [[get_called_class(), 'validateIconElement']],
     ];
 
+    // ksm($attributes);
     if ($this->getSetting('target')) {
       $element['options']['attributes']['target'] = [
         '#type' => 'checkbox',
         '#title' => t('Open link in new window'),
         '#description' => t('If selected, the menu link will open in a new window/tab when clicked.'),
-        '#default_value' => isset($attributes['target']),
+        '#default_value' => !empty($attributes['target']),
         '#return_value' => '_blank',
-        // '#element_validate' => [[get_called_class(), 'validateTargetElement']],
       ];
     }
 
@@ -99,24 +99,22 @@ class MiconLinkWidget extends LinkWidget {
   /**
    * Recursively clean up options array if no data-icon is set.
    */
-  public static function validateIconElement($element, FormStateInterface $form_state, $form) {
-    $parents = array_slice($element['#parents'], 0, -3);
-    $values = $form_state->getValue($parents);
+  public static function validateElement($element, FormStateInterface $form_state, $form) {
+    $values = $form_state->getValue($element['#parents']);
+    // ksm($values);
     if (!empty($values)) {
-      foreach ($values['attributes'] as $attribute => $value) {
-        if (!empty($value[$attribute])) {
-          $values['options']['attributes'][$attribute] = $value[$attribute];
+      foreach ($values['options']['attributes'] as $attribute => $value) {
+        if (!empty($value)) {
+          $values['options']['attributes'][$attribute] = $value;
+          $values['attributes'][$attribute] = $value;
         }
         else {
           unset($values['options']['attributes'][$attribute]);
+          unset($values['attributes'][$attribute]);
         }
       }
     }
-    else {
-      unset($values['options']['attributes']['data-icon']);
-      unset($values['options']['attributes']['target']);
-    }
-    $form_state->setValue($parents, $values);
+    $form_state->setValueForElement($element, $values);
   }
 
   /**
