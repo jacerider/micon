@@ -75,7 +75,6 @@ class MiconLinkWidget extends LinkWidget {
       '#packages' => $this->getPackages(),
     ];
 
-    // ksm($attributes);
     if ($this->getSetting('target')) {
       $element['options']['attributes']['target'] = [
         '#type' => 'checkbox',
@@ -101,7 +100,6 @@ class MiconLinkWidget extends LinkWidget {
    */
   public static function validateElement($element, FormStateInterface $form_state, $form) {
     $values = $form_state->getValue($element['#parents']);
-    // ksm($values);
     if (!empty($values)) {
       foreach ($values['options']['attributes'] as $attribute => $value) {
         if (!empty($value)) {
