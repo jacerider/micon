@@ -4,7 +4,6 @@ namespace Drupal\micon_menu;
 
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\DependencyInjection\ServiceProviderBase;
-use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Modifies the language manager service.
@@ -25,4 +24,5 @@ class MiconMenuServiceProvider extends ServiceProviderBase {
     $definition = $container->getDefinition('menu_link.static.overrides');
     $definition->setClass('Drupal\micon_menu\MiconStaticMenuLinkOverrides');
   }
+
 }
