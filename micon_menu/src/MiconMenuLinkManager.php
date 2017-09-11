@@ -23,7 +23,7 @@ class MiconMenuLinkManager extends MenuLinkManager {
    */
   protected function processDefinition(array &$definition, $plugin_id) {
     // Use the micon link class override.
-    $this->default['class'] = 'Drupal\micon_menu\MiconMenuLinkDefault';
+    $this->defaults['class'] = 'Drupal\micon_menu\MiconMenuLinkDefault';
     parent::processDefinition($definition, $plugin_id);
   }
 
