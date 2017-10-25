@@ -82,13 +82,13 @@ function drush_micon($path = NULL) {
   $content[] = '  }';
   $content[] = '}' . "\n";
 
+  $content[] = '$micons: (';
   foreach ($miconIconManager->getIcons() as $package_id => $icons) {
-    $content[] = '$micons: (';
     foreach ($icons as $icon) {
       $content[] = '  ' . $icon->getSelector() . ': \'' . $icon->getHex() . '\',';
     }
-    $content[] = ');';
   }
+  $content[] = ');';
 
   $content[] = "\n";
 
