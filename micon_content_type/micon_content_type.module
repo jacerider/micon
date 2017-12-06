@@ -78,3 +78,11 @@ function micon_content_type_micon_icons_alter(&$icons) {
     }
   }
 }
+
+/**
+ * Implements hook_entity_type_alter().
+ */
+function micon_content_type_entity_type_alter(array &$entity_types) {
+  /* @var $entity_types \Drupal\Core\Entity\EntityTypeInterface[] */
+  $entity_types['node_type']->setListBuilderClass('Drupal\micon_content_type\MiconContentTypeListBuilder');
+}
