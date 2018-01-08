@@ -64,6 +64,7 @@ class MiconLinkFormatter extends LinkFormatter {
     return [
       'title' => '',
       'icon' => '',
+      'position' => 'before',
     ] + parent::defaultSettings();
   }
 
@@ -73,10 +74,13 @@ class MiconLinkFormatter extends LinkFormatter {
   public function settingsSummary() {
     $summary = parent::settingsSummary();
     if ($title = $this->getSetting('title')) {
-      $summary[] = t('Link title as @title', array('@title' => $title));
+      $summary[] = t('Link title as @title', ['@title' => $title]);
     }
     if ($icon = $this->getSetting('icon')) {
       $summary[] = $this->micon('Icon as')->setIcon($icon)->setIconAfter();
+    }
+    if ($position = $this->getSetting('position')) {
+      $summary[] = t('Icon position: @value', ['@value' => ucfirst($position)]);
     }
     return $summary;
   }
@@ -98,6 +102,13 @@ class MiconLinkFormatter extends LinkFormatter {
       '#default_value' => $this->getSetting('icon'),
       '#description' => $this->t('Will be used as the link icon even if one has been set on the field.'),
     ];
+    $form['position'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Icon position'),
+      '#options' => ['before' => $this->t('Before'), 'after' => $this->t('After')],
+      '#default_value' => $this->getSetting('position'),
+      '#required' => TRUE,
+    ];
     return $form;
   }
 
@@ -110,6 +121,7 @@ class MiconLinkFormatter extends LinkFormatter {
     $entity_type = $entity->getEntityTypeId();
     $title = $this->getSetting('title');
     $icon = $this->getSetting('icon');
+    $position = $this->getSetting('position');
     foreach ($element as &$item) {
       if ($title) {
         $item['#title'] = $this->token->replace($title, [$entity_type => $entity]);
@@ -118,7 +130,11 @@ class MiconLinkFormatter extends LinkFormatter {
         $icon = $item['#options']['attributes']['data-icon'];
       }
       if ($icon) {
-        $item['#title'] = $this->micon($item['#title'])->setIcon($icon);
+        $micon = $this->micon($item['#title'])->setIcon($icon);
+        if ($position == 'after') {
+          $micon->setIconAfter();
+        }
+        $item['#title'] = $micon;
         unset($item['#options']['attributes']['data-icon']);
       }
     }

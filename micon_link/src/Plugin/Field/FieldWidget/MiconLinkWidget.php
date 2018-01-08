@@ -6,6 +6,7 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\link\Plugin\Field\FieldWidget\LinkWidget;
 use Drupal\micon\Entity\Micon;
+use Drupal\micon\MiconIconizeTrait;
 
 /**
  * Plugin implementation of the 'link' widget.
@@ -19,6 +20,7 @@ use Drupal\micon\Entity\Micon;
  * )
  */
 class MiconLinkWidget extends LinkWidget {
+  use MiconIconizeTrait;
 
   /**
    * {@inheritdoc}
@@ -29,6 +31,7 @@ class MiconLinkWidget extends LinkWidget {
       'placeholder_title' => '',
       'target' => FALSE,
       'packages' => [],
+      'icon' => '',
     ] + parent::defaultSettings();
   }
 
@@ -44,6 +47,12 @@ class MiconLinkWidget extends LinkWidget {
       '#default_value' => $this->getSetting('packages'),
       '#description' => t('The icon packages that should be made available in this field. If no packages are selected, all will be made available.'),
       '#options' => Micon::loadActiveLabels(),
+    ];
+
+    $element['icon'] = [
+      '#type' => 'micon',
+      '#title' => $this->t('Default icon'),
+      '#default_value' => $this->getSetting('icon'),
     ];
 
     $element['target'] = [
@@ -71,7 +80,7 @@ class MiconLinkWidget extends LinkWidget {
     $element['options']['attributes']['data-icon'] = [
       '#type' => 'micon',
       '#title' => $this->t('Icon'),
-      '#default_value' => isset($attributes['data-icon']) ? $attributes['data-icon'] : NULL,
+      '#default_value' => isset($attributes['data-icon']) ? $attributes['data-icon'] : $this->getSetting('icon'),
       '#packages' => $this->getPackages(),
     ];
 
@@ -127,6 +136,9 @@ class MiconLinkWidget extends LinkWidget {
     }
     else {
       $summary[] = $this->t('With icon packages: @packages', ['@packages' => 'All']);
+    }
+    if ($icon = $this->getSetting('icon')) {
+      $summary[] = $this->micon('Default icon: ')->setIcon($icon)->setIconAfter();
     }
     if ($this->getSetting('target')) {
       $summary[] = $this->t('Allow target selection');
