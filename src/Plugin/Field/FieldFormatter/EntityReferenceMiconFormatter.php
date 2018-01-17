@@ -11,7 +11,7 @@ use Drupal\micon\MiconIconize;
  *
  * @FieldFormatter(
  *   id = "entity_reference_micon",
- *   label = @Translation("Micon"),
+ *   label = @Translation("Label with Micon"),
  *   description = @Translation("Display the icon of an entity reference."),
  *   field_types = {
  *     "entity_reference"
