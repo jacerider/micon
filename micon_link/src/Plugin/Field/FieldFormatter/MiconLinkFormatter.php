@@ -120,9 +120,9 @@ class MiconLinkFormatter extends LinkFormatter {
     $entity = $items->getEntity();
     $entity_type = $entity->getEntityTypeId();
     $title = $this->getSetting('title');
-    $icon = $this->getSetting('icon');
     $position = $this->getSetting('position');
     foreach ($element as &$item) {
+      $icon = $this->getSetting('icon');
       if ($title) {
         $item['#title'] = $this->token->replace($title, [$entity_type => $entity]);
       }
