@@ -32,20 +32,20 @@ class Micon extends FormElement {
    */
   public function getInfo() {
     $class = get_class($this);
-    return array(
+    return [
       '#input' => TRUE,
-      '#process' => array(
-        array($class, 'processMicon'),
-        array($class, 'processAjaxForm'),
-      ),
-      '#pre_render' => array(
-        array($class, 'preRenderMicon'),
-      ),
+      '#process' => [
+        [$class, 'processMicon'],
+        [$class, 'processAjaxForm'],
+      ],
+      '#pre_render' => [
+        [$class, 'preRenderMicon'],
+      ],
       '#theme' => 'select',
-      '#theme_wrappers' => array('form_element'),
+      '#theme_wrappers' => ['form_element'],
       '#multiple' => FALSE,
       '#packages' => [],
-    );
+    ];
   }
 
   /**
@@ -70,6 +70,7 @@ class Micon extends FormElement {
   public static function processMicon(array &$element, FormStateInterface $form_state, array &$complete_form) {
     // For proper validation we need to override the type as a select field.
     $element['#type'] = 'select';
+    $element['#attributes']['class'][] = 'js-hide';
     $element['#options'] = [];
 
     // If the element is set to #required through #states, override the
@@ -80,14 +81,14 @@ class Micon extends FormElement {
     // make a choice. Also, if there's a value for #empty_value or
     // #empty_option, then add an option that represents emptiness.
     if (($required && !isset($element['#default_value'])) || isset($element['#empty_value']) || isset($element['#empty_option'])) {
-      $element += array(
+      $element += [
         '#empty_value' => '',
         '#empty_option' => $required ? t('- Select -') : t('- None -'),
-      );
+      ];
       // The empty option is prepended to #options and purposively not merged
       // to prevent another option in #options mistakenly using the same value
       // as #empty_value.
-      $empty_option = array($element['#empty_value'] => $element['#empty_option']);
+      $empty_option = [$element['#empty_value'] => $element['#empty_option']];
       $element['#options'] = $empty_option + $element['#options'];
     }
     else {
@@ -134,8 +135,8 @@ class Micon extends FormElement {
    * Prepares a select render element.
    */
   public static function preRenderMicon($element) {
-    Element::setAttributes($element, array('id', 'name', 'size'));
-    static::setAttributes($element, array('form-micon'));
+    Element::setAttributes($element, ['id', 'name', 'size']);
+    static::setAttributes($element, ['form-micon']);
     return $element;
   }
 
