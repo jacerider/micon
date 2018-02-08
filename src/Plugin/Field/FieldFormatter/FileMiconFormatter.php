@@ -94,6 +94,7 @@ class FileMiconFormatter extends FileFormatterBase {
       }
 
       $link_text = $this->getSetting('title') ? $this->getSetting('title') : $item->description;
+      $icon = $this->mimeMap($file->getMimeType());
       $link_text = micon($link_text)->setIcon($this->mimeMap($file->getMimeType()));
       $elements[$delta] = Link::fromTextAndUrl($link_text, Url::fromUri($url, $options))->toRenderable();
       $elements[$delta]['#cache']['tags'] = $file->getCacheTags();
@@ -115,6 +116,10 @@ class FileMiconFormatter extends FileFormatterBase {
       'default' => [
         'label' => t('Default'),
         'icon' => 'fa-file',
+      ],
+      'image' => [
+        'label' => t('Image'),
+        'icon' => 'fa-file-image',
       ],
       'document' => [
         'label' => t('Document'),
@@ -156,6 +161,13 @@ class FileMiconFormatter extends FileFormatterBase {
    */
   protected function mimeMap($mime_type) {
     switch ($mime_type) {
+      // Image types.
+      case 'image/jpeg':
+      case 'image/png':
+      case 'image/gif':
+      case 'image/bmp':
+        return $this->getSetting('icon_image');
+
       // Word document types.
       case 'application/msword':
       case 'application/vnd.ms-word.document.macroEnabled.12':
@@ -275,7 +287,7 @@ class FileMiconFormatter extends FileFormatterBase {
         return $this->getSetting('icon_pdf');
 
       default:
-        return FALSE;
+        return $this->getSetting('icon_default');
     }
   }
 
