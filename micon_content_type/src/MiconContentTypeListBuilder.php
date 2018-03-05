@@ -23,9 +23,7 @@ class MiconContentTypeListBuilder extends NodeTypeListBuilder {
    */
   public function buildRow(EntityInterface $entity) {
     $icon = micon_content_type_icon($entity);
-    if ($icon) {
-      $row['icon']['data']['#markup'] = micon()->setIcon($icon);
-    }
+    $row['icon']['data']['#markup'] = $icon ? micon()->setIcon($icon) : '';
     return $row + parent::buildRow($entity);
   }
 
