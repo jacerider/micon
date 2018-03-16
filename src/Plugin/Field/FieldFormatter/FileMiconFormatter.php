@@ -28,6 +28,7 @@ class FileMiconFormatter extends FileFormatterBase {
     $settings = [
       'title' => 'View',
       'icon' => 'fa-file',
+      'position' => 'before',
       'target' => '',
     ];
     foreach (self::mimeGroups() as $id => $data) {
@@ -43,6 +44,12 @@ class FileMiconFormatter extends FileFormatterBase {
   public function settingsSummary() {
     $summary = [];
     $summary[] = t('Link title as @title', ['@title' => $this->getSetting('title') ? $this->getSetting('title') : 'Default']);
+    if ($position = $this->getSetting('position')) {
+      $summary[] = t('Icon position: @value', ['@value' => ucfirst($position)]);
+    }
+    if ($this->getSetting('target')) {
+      $summary[] = t('Open link in new window');
+    }
     return $summary;
   }
 
@@ -64,12 +71,13 @@ class FileMiconFormatter extends FileFormatterBase {
         '#default_value' => $this->getSetting($key),
       ];
     }
-    // $form['icon'] = [
-
-    //   '#type' => 'micon',
-    //   '#title' => $this->t('Icon'),
-    //   '#default_value' => $this->getSetting('icon'),
-    // ];
+    $form['position'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Icon position'),
+      '#options' => ['before' => $this->t('Before'), 'after' => $this->t('After')],
+      '#default_value' => $this->getSetting('position'),
+      '#required' => TRUE,
+    ];
     $form['target'] = [
       '#type' => 'checkbox',
       '#title' => t('Open link in new window'),
@@ -94,8 +102,12 @@ class FileMiconFormatter extends FileFormatterBase {
       }
 
       $link_text = $this->getSetting('title') ? $this->getSetting('title') : $item->description;
+      $position = $this->getSetting('position');
       $icon = $this->mimeMap($file->getMimeType());
       $link_text = micon($link_text)->setIcon($this->mimeMap($file->getMimeType()));
+      if ($position == 'after') {
+        $link_text->setIconAfter();
+      }
       $elements[$delta] = Link::fromTextAndUrl($link_text, Url::fromUri($url, $options))->toRenderable();
       $elements[$delta]['#cache']['tags'] = $file->getCacheTags();
       // Pass field item attributes to the theme function.
@@ -111,7 +123,10 @@ class FileMiconFormatter extends FileFormatterBase {
     return $elements;
   }
 
-  public static  function mimeGroups() {
+  /**
+   * Get mime groups.
+   */
+  public static function mimeGroups() {
     return [
       'default' => [
         'label' => t('Default'),
