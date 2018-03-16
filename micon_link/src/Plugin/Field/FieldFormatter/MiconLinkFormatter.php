@@ -94,7 +94,7 @@ class MiconLinkFormatter extends LinkFormatter {
       '#type' => 'textfield',
       '#title' => $this->t('Link title'),
       '#default_value' => $this->getSetting('title'),
-      '#description' => $this->t('Will be used as the link title even if one has been set on the field. Supports token replacement.'),
+      '#description' => $this->t('Will be used as the link title unless one has been set on the field. Supports token replacement.'),
     ];
     $form['icon'] = [
       '#type' => 'micon',
@@ -121,9 +121,9 @@ class MiconLinkFormatter extends LinkFormatter {
     $entity_type = $entity->getEntityTypeId();
     $title = $this->getSetting('title');
     $position = $this->getSetting('position');
-    foreach ($element as &$item) {
+    foreach ($element as $delta => &$item) {
       $icon = $this->getSetting('icon');
-      if ($title) {
+      if ($title && empty($items[$delta]->title)) {
         $item['#title'] = $this->token->replace($title, [$entity_type => $entity]);
       }
       if (!$icon && !empty($item['#options']['attributes']['data-icon'])) {
