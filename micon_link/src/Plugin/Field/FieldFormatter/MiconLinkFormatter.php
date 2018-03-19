@@ -65,6 +65,7 @@ class MiconLinkFormatter extends LinkFormatter {
       'title' => '',
       'icon' => '',
       'position' => 'before',
+      'text_only' => '',
     ] + parent::defaultSettings();
   }
 
@@ -72,15 +73,36 @@ class MiconLinkFormatter extends LinkFormatter {
    * {@inheritdoc}
    */
   public function settingsSummary() {
-    $summary = parent::settingsSummary();
-    if ($title = $this->getSetting('title')) {
-      $summary[] = t('Link title as @title', ['@title' => $title]);
+    $summary = [];
+
+    $settings = $this->getSettings();
+
+    if (!empty($settings['title'])) {
+      $summary[] = t('Link title as @title', ['@title' => $settings['title']]);
     }
-    if ($icon = $this->getSetting('icon')) {
-      $summary[] = $this->micon('Icon as')->setIcon($icon)->setIconAfter();
+    if (!empty($settings['icon'])) {
+      $summary[] = $this->micon('Icon as')->setIcon($settings['icon'])->setIconAfter();
     }
-    if ($position = $this->getSetting('position')) {
-      $summary[] = t('Icon position: @value', ['@value' => ucfirst($position)]);
+    if (!empty($settings['position'])) {
+      $summary[] = t('Icon position: @value', ['@value' => ucfirst($settings['position'])]);
+    }
+    if (!empty($settings['trim_length'])) {
+      $summary[] = t('Link text trimmed to @limit characters', ['@limit' => $settings['trim_length']]);
+    }
+    else {
+      $summary[] = t('Link text not trimmed');
+    }
+
+    if (!empty($settings['text_only'])) {
+      $summary[] = t('Text only');
+    }
+    else {
+      if (!empty($settings['rel'])) {
+        $summary[] = t('Add rel="@rel"', ['@rel' => $settings['rel']]);
+      }
+      if (!empty($settings['target'])) {
+        $summary[] = t('Open link in new window');
+      }
     }
     return $summary;
   }
@@ -89,27 +111,45 @@ class MiconLinkFormatter extends LinkFormatter {
    * {@inheritdoc}
    */
   public function settingsForm(array $form, FormStateInterface $form_state) {
-    $form = parent::settingsForm($form, $form_state);
-    $form['title'] = [
+    $elements = parent::settingsForm($form, $form_state);
+    $elements['title'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Link title'),
       '#default_value' => $this->getSetting('title'),
       '#description' => $this->t('Will be used as the link title unless one has been set on the field. Supports token replacement.'),
+      '#weight' => -10,
     ];
-    $form['icon'] = [
+    $elements['text_only'] = [
+      '#type' => 'checkbox',
+      '#title' => t('Text only'),
+      '#default_value' => $this->getSetting('text_only'),
+      '#weight' => -10,
+    ];
+    $elements['icon'] = [
       '#type' => 'micon',
       '#title' => $this->t('Link icon'),
       '#default_value' => $this->getSetting('icon'),
       '#description' => $this->t('Will be used as the link icon even if one has been set on the field.'),
+      '#weight' => -10,
     ];
-    $form['position'] = [
+    $elements['position'] = [
       '#type' => 'select',
       '#title' => $this->t('Icon position'),
       '#options' => ['before' => $this->t('Before'), 'after' => $this->t('After')],
       '#default_value' => $this->getSetting('position'),
       '#required' => TRUE,
+      '#weight' => -10,
     ];
-    return $form;
+
+    $visibility = [
+      'invisible' => [
+        ':input[name*="text_only"]' => ['checked' => TRUE],
+      ],
+    ];
+    $elements['rel']['#states'] = $visibility;
+    $elements['target']['#states'] = $visibility;
+
+    return $elements;
   }
 
   /**
@@ -121,6 +161,7 @@ class MiconLinkFormatter extends LinkFormatter {
     $entity_type = $entity->getEntityTypeId();
     $title = $this->getSetting('title');
     $position = $this->getSetting('position');
+    $text_only = $this->getSetting('text_only');
     foreach ($element as $delta => &$item) {
       $icon = $this->getSetting('icon');
       if ($title && empty($items[$delta]->title)) {
@@ -136,6 +177,11 @@ class MiconLinkFormatter extends LinkFormatter {
         }
         $item['#title'] = $micon;
         unset($item['#options']['attributes']['data-icon']);
+      }
+      if ($text_only) {
+        $item = [
+          '#markup' => $item['#title'],
+        ];
       }
     }
     return $element;

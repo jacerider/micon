@@ -30,6 +30,7 @@ class FileMiconFormatter extends FileFormatterBase {
       'icon' => 'fa-file',
       'position' => 'before',
       'target' => '',
+      'text_only' => '',
     ];
     foreach (self::mimeGroups() as $id => $data) {
       $key = 'icon_' . $id;
@@ -47,8 +48,13 @@ class FileMiconFormatter extends FileFormatterBase {
     if ($position = $this->getSetting('position')) {
       $summary[] = t('Icon position: @value', ['@value' => ucfirst($position)]);
     }
-    if ($this->getSetting('target')) {
-      $summary[] = t('Open link in new window');
+    if ($this->getSetting('text_only')) {
+      $summary[] = t('Text only');
+    }
+    else {
+      if ($this->getSetting('target')) {
+        $summary[] = t('Open link in new window');
+      }
     }
     return $summary;
   }
@@ -57,34 +63,44 @@ class FileMiconFormatter extends FileFormatterBase {
    * {@inheritdoc}
    */
   public function settingsForm(array $form, FormStateInterface $form_state) {
-    $form = parent::settingsForm($form, $form_state);
-    $form['title'] = [
+    $elements = parent::settingsForm($form, $form_state);
+    $elements['title'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Link title'),
       '#default_value' => $this->getSetting('title'),
     ];
+    $elements['text_only'] = [
+      '#type' => 'checkbox',
+      '#title' => t('Text only'),
+      '#default_value' => $this->getSetting('text_only'),
+    ];
     foreach (self::mimeGroups() as $id => $data) {
       $key = 'icon_' . $id;
-      $form['icon_' . $key] = [
+      $elements['icon_' . $key] = [
         '#type' => 'micon',
         '#title' => $this->t('Icon for %type', ['%type' => $data['label']]),
         '#default_value' => $this->getSetting($key),
       ];
     }
-    $form['position'] = [
+    $elements['position'] = [
       '#type' => 'select',
       '#title' => $this->t('Icon position'),
       '#options' => ['before' => $this->t('Before'), 'after' => $this->t('After')],
       '#default_value' => $this->getSetting('position'),
       '#required' => TRUE,
     ];
-    $form['target'] = [
+    $elements['target'] = [
       '#type' => 'checkbox',
       '#title' => t('Open link in new window'),
       '#return_value' => '_blank',
       '#default_value' => $this->getSetting('target'),
+      '#states' => [
+        'invisible' => [
+          ':input[name*="text_only"]' => ['checked' => TRUE],
+        ],
+      ],
     ];
-    return $form;
+    return $elements;
   }
 
   /**
@@ -108,7 +124,12 @@ class FileMiconFormatter extends FileFormatterBase {
       if ($position == 'after') {
         $link_text->setIconAfter();
       }
-      $elements[$delta] = Link::fromTextAndUrl($link_text, Url::fromUri($url, $options))->toRenderable();
+      if ($this->getSetting('text_only')) {
+        $elements[$delta]['#markup'] = $link_text;
+      }
+      else {
+        $elements[$delta] = Link::fromTextAndUrl($link_text, Url::fromUri($url, $options))->toRenderable();
+      }
       $elements[$delta]['#cache']['tags'] = $file->getCacheTags();
       // Pass field item attributes to the theme function.
       if (isset($item->_attributes)) {
