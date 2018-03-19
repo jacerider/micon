@@ -30,7 +30,8 @@ class EntityReferenceMiconFormatter extends EntityReferenceLabelFormatter {
     foreach ($this->getEntitiesToView($items, $langcode) as $delta => $entity) {
       $icon = new MiconIconize($entity->label());
       if ($icon) {
-        $icon->addMatchPrefix($entity->bundle())->setIconOnly();
+        $bundle = $entity->bundle() == 'node_type' ? 'content_type' : $entity->bundle();
+        $icon->addMatchPrefix($bundle)->setIconOnly();
         // If the link is to be displayed and the entity has a uri, display a
         // link.
         if ($output_as_link && !$entity->isNew()) {
