@@ -314,7 +314,7 @@ class FileMiconFormatter extends FileFormatterBase {
       case 'application/x-pef-executable':
         return $this->getSetting('icon_executable');
 
-      // Acrobat types
+      // Acrobat types.
       case 'application/pdf':
       case 'application/x-pdf':
       case 'applications/vnd.pdf':
