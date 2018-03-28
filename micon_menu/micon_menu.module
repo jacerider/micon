@@ -38,6 +38,7 @@ function micon_menu_entity_base_field_info_alter(&$fields, EntityTypeInterface $
       'weight' => -2,
       'settings' => [
         'target' => TRUE,
+        'position' => TRUE,
       ],
     ]);
   }
@@ -190,7 +191,11 @@ function _micon_menu_preprocess_menu_items($items) {
   foreach ($items as &$item) {
     $options = $item['url']->getOptions();
     if (!empty($options['attributes']['data-icon'])) {
-      $item['title'] = MiconIconize::iconize($item['title'])->setIcon($options['attributes']['data-icon'])->render();
+      $icon = MiconIconize::iconize($item['title'])->setIcon($options['attributes']['data-icon']);
+      if (!empty($options['attributes']['data-icon-position']) && $options['attributes']['data-icon-position'] === 'after') {
+        $icon->setIconAfter();
+      }
+      $item['title'] = $icon->render();
       unset($options['attributes']['data-icon']);
       $item['url']->setOptions($options);
     }

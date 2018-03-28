@@ -160,7 +160,7 @@ class MiconLinkFormatter extends LinkFormatter {
     $entity = $items->getEntity();
     $entity_type = $entity->getEntityTypeId();
     $title = $this->getSetting('title');
-    $position = $this->getSetting('position');
+    $default_position = $this->getSetting('position');
     $text_only = $this->getSetting('text_only');
     foreach ($element as $delta => &$item) {
       $icon = $this->getSetting('icon');
@@ -171,6 +171,7 @@ class MiconLinkFormatter extends LinkFormatter {
         $icon = $item['#options']['attributes']['data-icon'];
       }
       if ($icon) {
+        $position = !empty($item['#options']['attributes']['data-icon-position']) ? $item['#options']['attributes']['data-icon-position'] : $default_position;
         $micon = $this->micon($item['#title'])->setIcon($icon);
         if ($position == 'after') {
           $micon->setIconAfter();

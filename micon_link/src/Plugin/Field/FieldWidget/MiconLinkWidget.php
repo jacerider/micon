@@ -7,6 +7,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\link\Plugin\Field\FieldWidget\LinkWidget;
 use Drupal\micon\Entity\Micon;
 use Drupal\micon\MiconIconizeTrait;
+use Drupal\Component\Utility\Html;
 
 /**
  * Plugin implementation of the 'link' widget.
@@ -32,6 +33,7 @@ class MiconLinkWidget extends LinkWidget {
       'target' => FALSE,
       'packages' => [],
       'icon' => '',
+      'position' => FALSE,
     ] + parent::defaultSettings();
   }
 
@@ -51,8 +53,15 @@ class MiconLinkWidget extends LinkWidget {
 
     $element['icon'] = [
       '#type' => 'micon',
-      '#title' => $this->t('Default icon'),
+      '#title' => $this->t('Default Icon'),
       '#default_value' => $this->getSetting('icon'),
+    ];
+
+    $element['position'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Allow icon position selection'),
+      '#description' => $this->t('If selected, a "position" select will be made available.'),
+      '#default_value' => $this->getSetting('position'),
     ];
 
     $element['target'] = [
@@ -72,6 +81,7 @@ class MiconLinkWidget extends LinkWidget {
     $element = parent::formElement($items, $delta, $element, $form, $form_state);
     $element['#element_validate'][] = [get_called_class(), 'validateElement'];
     $element['title']['#weight'] = -1;
+    $id = Html::getUniqueId('micon-link-' . $this->fieldDefinition->getName() . '-icon');
 
     $item = $items[$delta];
     $options = $item->get('options')->getValue();
@@ -80,8 +90,24 @@ class MiconLinkWidget extends LinkWidget {
     $element['options']['attributes']['data-icon'] = [
       '#type' => 'micon',
       '#title' => $this->t('Icon'),
+      '#id' => $id,
       '#default_value' => isset($attributes['data-icon']) ? $attributes['data-icon'] : $this->getSetting('icon'),
       '#packages' => $this->getPackages(),
+    ];
+
+    $element['options']['attributes']['data-icon-position'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Icon position'),
+      '#options' => ['before' => $this->t('Before'), 'after' => $this->t('After')],
+      '#default_value' => isset($attributes['data-icon-position']) ? $attributes['data-icon-position'] : NULL,
+      '#states' => [
+        'invisible' => [
+          '#' . $id => ['value' => ''],
+        ],
+        'optional' => [
+          '#' . $id => ['value' => ''],
+        ],
+      ],
     ];
 
     if ($this->getSetting('target')) {
