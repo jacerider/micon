@@ -19,3 +19,6 @@ micon.micon.*:
     archive:
       type: sequence
       label: 'Archive'
+    static_archive_location:
+      type: string
+      label: "Static archive location"

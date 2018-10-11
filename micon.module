@@ -110,7 +110,12 @@ function micon_library_info_build() {
   $libraries = [];
   foreach (Micon::loadMultiple() as $micon) {
     if ($stylesheet = $micon->getStylesheet()) {
-      $libraries['micon.' . $micon->id()]['css']['theme'][$stylesheet] = [];
+      if ($micon->hasStaticArchive()) {
+        $libraries['micon.' . $micon->id()]['css']['theme']['/' . $stylesheet] = [];
+      }
+      else {
+        $libraries['micon.' . $micon->id()]['css']['theme'][$stylesheet] = [];
+      }
       // Add SVG library if necessary.
       if ($micon->type() == 'image') {
         $libraries['micon.' . $micon->id()]['dependencies'][] = 'micon/micon.svg';
