@@ -6,6 +6,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Cache\UseCacheBackendTrait;
 use Drupal\Core\Cache\Cache;
+use Drupal\Component\Assertion\Inspector;
 use Drupal\micon\Entity\Micon;
 
 /**
@@ -118,7 +119,7 @@ class MiconIconManager {
    *   icons should be cleared along with other, related cache entries.
    */
   public function setCacheBackend(CacheBackendInterface $cache_backend, $cache_key, array $cache_tags = array()) {
-    assert('\Drupal\Component\Assertion\Inspector::assertAllStrings($cache_tags)', 'Cache Tags must be strings.');
+    assert(Inspector::assertAllStrings($cache_tags), 'Cache Tags must be strings.');
     $this->cacheBackend = $cache_backend;
     $this->cacheKey = $cache_key;
     $this->cacheTags = $cache_tags;
