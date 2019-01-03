@@ -4,6 +4,6 @@ description: Provides the ability to set icons for menu link content.
 core: 8.x
 package: Micon
 dependencies:
-  - menu_link_content
-  - menu_ui
-  - micon_link
+  - drupal:menu_link_content
+  - drupal:menu_ui
+  - micon:micon_link
