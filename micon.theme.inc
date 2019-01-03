@@ -103,7 +103,7 @@ function micon_template_preprocess_micon_package__font(&$variables) {
   $variables['content']['use']['#children']['details'] = [
     '#markup' => '<textarea rows="13" class="micon-usage">
 /* use !important to prevent issues with browser extensions that change fonts */
-font-family: \'' . (isset($info['metadata']['name']) ? $info['metadata']['name'] : '')  . '\' !important;
+font-family: \'' . $info['metadata']['name'] . '\' !important;
 speak: none;
 font-style: normal;
 font-weight: normal;

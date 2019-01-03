@@ -7,7 +7,6 @@ use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityMalformedException;
 use Drupal\Component\Serialization\Json;
 use Drupal\micon\MiconIcon;
-use const DRUPAL_ROOT;
 
 /**
  * Defines the Micon entity.
@@ -39,8 +38,7 @@ use const DRUPAL_ROOT;
  *     "id" = "id",
  *     "label" = "label",
  *     "uuid" = "uuid",
- *     "status" = "status",
- *     "static_archive_location" = "static_archive_location",
+ *     "status" = "status"
  *   },
  *   links = {
  *     "canonical" = "/admin/structure/micon/{micon}",
@@ -52,7 +50,6 @@ use const DRUPAL_ROOT;
  * )
  */
 class Micon extends ConfigEntityBase implements MiconInterface {
-  const STATIC_ARCHIVE_LOCATION = 'static_archive_location';
 
   /**
    * The Micon ID.
@@ -114,35 +111,15 @@ class Micon extends ConfigEntityBase implements MiconInterface {
    * {@inheritdoc}
    */
   public function getInfo() {
-    if (!empty($this->info)) {
-      return $this->info;
+    if (empty($this->info)) {
+      $this->info = [];
+      $path = $this->getDirectory() . '/selection.json';
+      if (file_exists($path)) {
+        $data = file_get_contents($path);
+        $this->info = Json::decode($data);
+      }
     }
-
-    $this->info = [];
-    $path = $this->getDirectory() . '/selection.json';
-
-    if (!file_exists($path) && $this->hasStaticArchive()) {
-      $this->archiveExtract(DRUPAL_ROOT . '/' . $this->get(static::STATIC_ARCHIVE_LOCATION));
-    }
-
-    if (file_exists($path)) {
-      $data = file_get_contents($path);
-      $this->info = Json::decode($data);
-    }
-
     return $this->info;
-  }
-
-  /**
-   * Is a static archive location defined.
-   *
-   * @return bool
-   *   Does this have a static archive location defined?
-   */
-  public function hasStaticArchive() {
-    $static_archive = $this->get(static::STATIC_ARCHIVE_LOCATION);
-
-    return !empty($static_archive);
   }
 
   /**
@@ -214,12 +191,7 @@ class Micon extends ConfigEntityBase implements MiconInterface {
    *   The unique path to the package directory.
    */
   protected function getDirectory() {
-    if ($this->hasStaticArchive()) {
-      return $this->get(static::STATIC_ARCHIVE_LOCATION);
-    }
-    else {
-      return $this->directory . '/' . $this->id();
-    }
+    return $this->directory . '/' . $this->id();
   }
 
   /**
@@ -258,14 +230,10 @@ class Micon extends ConfigEntityBase implements MiconInterface {
       $original = $storage->loadUnchanged($this->getOriginalId());
     }
 
-    if ($this->hasStaticArchive()) {
-      $this->set('archive', '');
-    }
-
-    if (!$this->get('archive') && !$this->hasStaticArchive()) {
+    if (!$this->get('archive')) {
       throw new EntityMalformedException('IcoMoon icon package is required.');
     }
-    if (!$this->hasStaticArchive() && ($this->isNew() || $original->get('archive') !== $this->get('archive'))) {
+    if ($this->isNew() || $original->get('archive') !== $this->get('archive')) {
       $this->archiveDecode();
     }
   }
@@ -276,49 +244,21 @@ class Micon extends ConfigEntityBase implements MiconInterface {
   public static function preDelete(EntityStorageInterface $storage, array $entities) {
     parent::preDelete($storage, $entities);
     foreach ($entities as $entity) {
-      if (!$entity->hasStaticArchive()) {
-        // Remove all files within package directory.
-        file_unmanaged_delete_recursive($entity->getDirectory());
-        // Clean up empty directory. Will fail silently if it is not empty.
-        @rmdir($entity->directory);
-      }
+      // Remove all files within package directory.
+      file_unmanaged_delete_recursive($entity->getDirectory());
+      // Clean up empty directory. Will fail silently if it is not empty.
+      @rmdir($entity->directory);
     }
-  }
-
-  /**
-   * Get the archive path.
-   *
-   * @return string
-   *   The path.
-   */
-  protected function getArchivePath() {
-    $tempfile = 'temporary://' . $this->id . '.zip';
-    if ($this->hasStaticArchive()) {
-      \copy(DRUPAL_ROOT . '/' . $this->get(static::STATIC_ARCHIVE_LOCATION), $tempfile);
-
-      return $tempfile;
-    }
-
-    $this->fillArchivePathFromArchiveData($tempfile);
-
-    return $tempfile;
-  }
-
-  /**
-   * Create the archive path from base64 archive data.
-   *
-   * @param string $path
-   *   The path to write to.
-   */
-  protected function fillArchivePathFromArchiveData($path) {
-    file_put_contents($path, $this->getArchive());
   }
 
   /**
    * Take base64 encoded archive and save it to a temporary file for extraction.
    */
   protected function archiveDecode() {
-    $this->archiveExtract($this->getArchivePath());
+    $data = $this->getArchive();
+    $zip_path = 'temporary://' . $this->id() . '.zip';
+    file_put_contents($zip_path, $data);
+    $this->archiveExtract($zip_path);
   }
 
   /**
@@ -367,26 +307,18 @@ class Micon extends ConfigEntityBase implements MiconInterface {
     // Update IcoMoon selection.json.
     $file_path = $directory . '/selection.json';
     $file_contents = file_get_contents($file_path);
-
-    $replacementMap = [
-      // Protect icon keys.
-      '"icons":' => 'MICONSIcons',
-      '"icon":' => 'MICONIcon',
-      'iconIdx' => 'MICONIdx',
-      $this->getPrefix() => 'MICONPrefix',
-      // The name and selector should be updated to match entity info.
-      $this->getName() => $this->id(),
-      // Return protected keys.
-      'MICONSIcons' => '"icons":',
-      'MICONIcon' => '"icon":',
-      'MICONIdx' => 'iconIdx',
-      'MICONPrefix' => $this->id() . '-',
-    ];
-
-    foreach ($replacementMap as $search => $replace) {
-      $file_contents = str_replace($search, $replace, $file_contents);
-    }
-
+    // Protect icon keys.
+    $file_contents = str_replace('"icons":', 'MICONSIcons', $file_contents);
+    $file_contents = str_replace('"icon":', 'MICONIcon', $file_contents);
+    $file_contents = str_replace('iconIdx', 'MICONIdx', $file_contents);
+    $file_contents = str_replace($this->getPrefix(), 'MICONPrefix', $file_contents);
+    // The name and selector should be updated to match entity info.
+    $file_contents = str_replace($this->getName(), $this->id(), $file_contents);
+    // Return protected keys.
+    $file_contents = str_replace('MICONSIcons', '"icons":', $file_contents);
+    $file_contents = str_replace('MICONIcon', '"icon":', $file_contents);
+    $file_contents = str_replace('MICONIdx', 'iconIdx', $file_contents);
+    $file_contents = str_replace('MICONPrefix', $this->id() . '-', $file_contents);
     file_put_contents($file_path, $file_contents);
 
     // Update IcoMoon stylesheet.

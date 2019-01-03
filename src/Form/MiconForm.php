@@ -4,7 +4,6 @@ namespace Drupal\micon\Form;
 
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\micon\Entity\Micon;
 use Drupal\micon\Entity\MiconInterface;
 
 /**
@@ -20,7 +19,6 @@ class MiconForm extends EntityForm {
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 
-    /* @var $micon \Drupal\micon\Entity\Micon */
     $micon = $this->entity;
     $form['label'] = [
       '#type' => 'textfield',
@@ -51,22 +49,6 @@ class MiconForm extends EntityForm {
       'file_validate_extensions' => array('zip'),
       'file_validate_size' => array(file_upload_max_size()),
     );
-
-    $fileOrStatic = isset($form_state->getUserInput()['file_or_static']) ? $form_state->getUserInput()['file_or_static'] : '';
-    if ($fileOrStatic === 'file') {
-      $micon->setStaticArchiveLocation('');
-    }
-
-    $form['file_or_static'] = array(
-      '#title' => t('Upload file or use a static location'),
-      '#type' => 'select',
-      '#options' => [
-        'file' => 'file',
-        'static' => 'static',
-      ],
-      '#default_value' => $micon->hasStaticArchive() ? 'static' : 'file',
-    );
-
     $form['file'] = array(
       '#type' => 'file',
       '#title' => $micon->isNew() ? $this->t('IcoMoon Font Package') : $this->t('Replace IcoMoon Font Package'),
@@ -78,26 +60,6 @@ class MiconForm extends EntityForm {
       '#size' => 50,
       '#upload_validators' => $validators,
       '#attributes' => array('class' => array('file-import-input')),
-      '#states' => [
-        'invisible' => [
-          'select[name="file_or_static"]' => ['value' => 'static'],
-        ],
-      ],
-    );
-
-    $form[Micon::STATIC_ARCHIVE_LOCATION] = array(
-      '#type' => 'textfield',
-      '#title' => t('Static archive location'),
-      '#description' => t('Static archive location, relative from the DRUPAL_ROOT'),
-      '#default_value' => $micon->get(Micon::STATIC_ARCHIVE_LOCATION),
-      '#states' => [
-        'invisible' => [
-          'select[name="file_or_static"]' => ['value' => 'file'],
-        ],
-        'disabled' => [
-          'select[name="file_or_static"]' => ['value' => 'file'],
-        ],
-      ],
     );
 
     $form['#entity_builders']['update_status'] = [$this, 'updateStatus'];
@@ -186,10 +148,6 @@ class MiconForm extends EntityForm {
   public function validateForm(array &$form, FormStateInterface $form_state) {
     parent::validateForm($form, $form_state);
 
-    if ($form_state->getUserInput()[Micon::STATIC_ARCHIVE_LOCATION] !== '') {
-      return;
-    }
-
     $this->file = file_save_upload('file', $form['file']['#upload_validators'], FALSE, 0);
 
     // Ensure we have the file uploaded.
@@ -204,13 +162,7 @@ class MiconForm extends EntityForm {
   public function save(array $form, FormStateInterface $form_state) {
     $micon = $this->entity;
 
-    $micon->set(Micon::STATIC_ARCHIVE_LOCATION,
-      isset($form_state->getUserInput()[Micon::STATIC_ARCHIVE_LOCATION])
-        ? $form_state->getUserInput()[Micon::STATIC_ARCHIVE_LOCATION]
-        : NULL
-    );
-
-    if (isset($this->file)) {
+    if ($this->file) {
       try {
         $zip_path = $this->file->getFileUri();
         $micon->setArchive($zip_path);
